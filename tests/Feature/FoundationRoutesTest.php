@@ -20,7 +20,7 @@ final class FoundationRoutesTest extends TestCase
 
     public function test_admin_and_member_shells_render_without_product_features(): void
     {
-        $this->get('/admin/dashboard')->assertOk()->assertSee('Admin dashboard foundation');
-        $this->get('/app/dashboard')->assertOk()->assertSee('Member dashboard foundation');
+        $this->get('/admin/dashboard')->assertRedirect('/login');
+        $this->get('/app/dashboard')->assertRedirect('/login');
     }
 }

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 2
+
+- Added registration, login, logout, email verification, password reset, profile editing, password updates, TOTP 2FA, recovery codes, security headers, and audit-log foundation.
+- Protected member and admin shells behind authentication, email verification, and 2FA middleware where enabled.
+- Added auth/security feature tests and documented the local Composer/OpenSSL blocker.
+
 ### Phase 1
 
 - Added Laravel 12 project foundation for PHP 8.2+ and cPanel shared hosting.
