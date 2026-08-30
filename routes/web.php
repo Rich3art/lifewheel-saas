@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\PluginController as AdminPluginController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -94,5 +95,16 @@ Route::prefix('admin')
         Route::middleware('permission:admin.permissions.manage')->group(function (): void {
             Route::get('/permissions', [AdminPermissionController::class, 'index'])->name('permissions.index');
             Route::post('/permissions', [AdminPermissionController::class, 'store'])->name('permissions.store');
+        });
+
+        Route::middleware('permission:admin.plugins.manage')->group(function (): void {
+            Route::get('/plugins', [AdminPluginController::class, 'index'])->name('plugins.index');
+            Route::post('/plugins/upload', [AdminPluginController::class, 'upload'])->name('plugins.upload');
+            Route::post('/plugins/{pluginId}/install', [AdminPluginController::class, 'install'])->name('plugins.install');
+            Route::post('/plugins/{pluginId}/activate', [AdminPluginController::class, 'activate'])->name('plugins.activate');
+            Route::post('/plugins/{pluginId}/deactivate', [AdminPluginController::class, 'deactivate'])->name('plugins.deactivate');
+            Route::post('/plugins/{pluginId}/update', [AdminPluginController::class, 'update'])->name('plugins.update');
+            Route::delete('/plugins/{pluginId}/uninstall', [AdminPluginController::class, 'uninstall'])->name('plugins.uninstall');
+            Route::delete('/plugins/{pluginId}/files', [AdminPluginController::class, 'deleteFiles'])->name('plugins.files.delete');
         });
     });

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 5
+
+- Added Super Admin plugin management UI, routes, controller, and dashboard entry.
+- Added trusted plugin ZIP upload/update service with manifest validation, zip-slip checks, denied path segments, file allowlist, size limits, and target-path confinement.
+- Added typed confirmation flows for uninstall and delete-files actions plus plugin admin/security tests.
+
 ### Phase 4
 
 - Added Core plugin registry, manifest validation, lifecycle contract, lifecycle service, dependency checks, compatibility checks, and enabled plugin route/migration loading.
