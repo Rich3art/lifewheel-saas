@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\RoleController as AdminRoleController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -69,7 +72,27 @@ Route::prefix('app')
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'verified', 'twofactor'])
+    ->middleware(['auth', 'verified', 'twofactor', 'permission:admin.dashboard.view'])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+
+        Route::middleware('permission:admin.users.manage')->group(function (): void {
+            Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::get('/users/{user}', [AdminUserController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{user}/roles', [AdminUserController::class, 'updateRoles'])->name('users.roles.update');
+            Route::put('/users/{user}/permissions', [AdminUserController::class, 'updatePermissions'])->name('users.permissions.update');
+            Route::put('/users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
+            Route::put('/users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');
+        });
+
+        Route::middleware('permission:admin.roles.manage')->group(function (): void {
+            Route::get('/roles', [AdminRoleController::class, 'index'])->name('roles.index');
+            Route::post('/roles', [AdminRoleController::class, 'store'])->name('roles.store');
+            Route::put('/roles/{role}', [AdminRoleController::class, 'update'])->name('roles.update');
+        });
+
+        Route::middleware('permission:admin.permissions.manage')->group(function (): void {
+            Route::get('/permissions', [AdminPermissionController::class, 'index'])->name('permissions.index');
+            Route::post('/permissions', [AdminPermissionController::class, 'store'])->name('permissions.store');
+        });
     });

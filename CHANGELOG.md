@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 3
+
+- Added database-backed RBAC with roles, permissions, pivots, protected roles, user suspension, seed data, and bootstrap Super Admin assignment.
+- Added permission middleware, admin route gates, Super Admin dashboard links, user administration, role management, and permission management screens.
+- Added admin authorization tests for guest denial, member denial, permission-granted access, protected role assignment, user suspension guardrails, and management actions.
+
 ### Phase 2
 
 - Added registration, login, logout, email verification, password reset, profile editing, password updates, TOTP 2FA, recovery codes, security headers, and audit-log foundation.

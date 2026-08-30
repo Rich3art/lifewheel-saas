@@ -8,6 +8,7 @@ use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 final class AuthenticatedSessionController extends Controller
@@ -23,6 +24,18 @@ final class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
+
+        if ($user?->isSuspended()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            $audit->log('auth.suspended_login_blocked', $user, $user);
+
+            throw ValidationException::withMessages([
+                'email' => 'This account is suspended.',
+            ]);
+        }
+
         $user?->forceFill(['last_login_at' => now()])->save();
         $audit->log('auth.login', $user, $user);
 
