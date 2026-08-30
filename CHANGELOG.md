@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 8
+
+- Added data-driven member settings section registry and Super Admin visibility controls.
+- Added member settings hub with profile, security, privacy, and billing sections.
+- Added privacy request and data export metadata tables for export, correction, consent review, and erasure workflows.
+- Added Super Admin privacy request queue with audited status updates.
+- Added tests covering settings visibility, privacy request ownership, and admin authorization.
+
 ### Phase 7
 
 - Added Core CMS pages with public rendering, admin editing, SEO metadata, legal page flags, and page version snapshots.

@@ -51,6 +51,18 @@
                     <strong class="mt-3 block text-xl">Blog</strong>
                 </a>
             @endcan
+            @can('admin.member_settings.manage')
+                <a href="{{ route('admin.member-settings.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
+                    <span class="text-sm text-zinc-400">Settings</span>
+                    <strong class="mt-3 block text-xl">Member visibility</strong>
+                </a>
+            @endcan
+            @can('admin.privacy.manage')
+                <a href="{{ route('admin.privacy-requests.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
+                    <span class="text-sm text-zinc-400">Privacy</span>
+                    <strong class="mt-3 block text-xl">Requests queue</strong>
+                </a>
+            @endcan
         </div>
     </main>
 </x-layouts.app>

@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Admin\BlogTaxonomyController as AdminBlogTaxonomyController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\PluginController as AdminPluginController;
+use App\Http\Controllers\Admin\MemberSettingsController as AdminMemberSettingsController;
+use App\Http\Controllers\Admin\PrivacyRequestController as AdminPrivacyRequestController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -22,6 +24,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\PrivacyRequestController as MemberPrivacyRequestController;
+use App\Http\Controllers\Member\SettingsController as MemberSettingsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +82,8 @@ Route::prefix('app')
     ->middleware(['auth', 'verified', 'twofactor'])
     ->group(function (): void {
         Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
+        Route::get('/settings', MemberSettingsController::class)->name('settings');
+        Route::post('/privacy-requests', [MemberPrivacyRequestController::class, 'store'])->name('privacy-requests.store');
     });
 
 Route::prefix('admin')
@@ -146,6 +152,16 @@ Route::prefix('admin')
             Route::get('/blog-taxonomy', [AdminBlogTaxonomyController::class, 'index'])->name('blog.taxonomy');
             Route::post('/blog-categories', [AdminBlogTaxonomyController::class, 'storeCategory'])->name('blog.categories.store');
             Route::post('/blog-tags', [AdminBlogTaxonomyController::class, 'storeTag'])->name('blog.tags.store');
+        });
+
+        Route::middleware('permission:admin.member_settings.manage')->group(function (): void {
+            Route::get('/member-settings', [AdminMemberSettingsController::class, 'index'])->name('member-settings.index');
+            Route::put('/member-settings', [AdminMemberSettingsController::class, 'update'])->name('member-settings.update');
+        });
+
+        Route::middleware('permission:admin.privacy.manage')->group(function (): void {
+            Route::get('/privacy-requests', [AdminPrivacyRequestController::class, 'index'])->name('privacy-requests.index');
+            Route::put('/privacy-requests/{privacyRequest}', [AdminPrivacyRequestController::class, 'update'])->name('privacy-requests.update');
         });
     });
 

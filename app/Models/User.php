@@ -102,4 +102,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserFeatureOverride::class);
     }
+
+    public function privacyRequests(): HasMany
+    {
+        return $this->hasMany(PrivacyRequest::class);
+    }
+
+    public function dataExports(): HasMany
+    {
+        return $this->hasMany(DataExport::class);
+    }
 }
