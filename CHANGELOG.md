@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 4
+
+- Added Core plugin registry, manifest validation, lifecycle contract, lifecycle service, dependency checks, compatibility checks, and enabled plugin route/migration loading.
+- Added plugin registration tables for permissions, features, menus, and settings sections.
+- Added a tiny first-party Example Audit plugin and plugin-system tests.
+
 ### Phase 3
 
 - Added database-backed RBAC with roles, permissions, pivots, protected roles, user suspension, seed data, and bootstrap Super Admin assignment.

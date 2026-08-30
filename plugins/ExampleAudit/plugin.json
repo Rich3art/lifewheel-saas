@@ -1,0 +1,47 @@
+{
+  "id": "example-audit",
+  "name": "Example Audit Plugin",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "Tiny first-party test plugin used to prove the core plugin lifecycle.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/ExampleAuditPlugin.php",
+  "class": "LifeWheel\\Plugins\\ExampleAudit\\ExampleAuditPlugin",
+  "dependencies": [],
+  "permissions": [
+    {
+      "slug": "example-audit.view",
+      "name": "View example audit plugin"
+    }
+  ],
+  "features": [
+    {
+      "slug": "example-audit.use",
+      "name": "Use example audit plugin"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "example-audit",
+      "label": "Example Plugin",
+      "route": "plugins.example-audit.ping",
+      "location": "member",
+      "sort": 1000
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "example-audit.settings",
+      "label": "Example Plugin",
+      "audience": "admin",
+      "sort": 1000
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

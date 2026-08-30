@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 3 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 4 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -35,6 +35,7 @@ Start here:
 - [Phase 1 Core Foundation](docs/PHASE_1_CORE_FOUNDATION.md)
 - [Phase 2 Auth And Security](docs/PHASE_2_AUTH_SECURITY.md)
 - [Phase 3 RBAC Super Admin And Users](docs/PHASE_3_RBAC_SUPER_ADMIN_USERS.md)
+- [Phase 4 Core Plugin System](docs/PHASE_4_CORE_PLUGIN_SYSTEM.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -55,3 +56,7 @@ Phase 2 adds core registration, login, logout, email verification, password rese
 ## Current RBAC Foundation
 
 Phase 3 adds database-backed roles, permissions, protected Super Admin bootstrapping, user administration, user suspension, direct user permission overrides, and permission-gated admin routes.
+
+## Current Plugin Foundation
+
+Phase 4 adds the Core plugin registry, manifest parser, lifecycle contract, lifecycle service, enabled route/migration loading, plugin registration tables, and a tiny first-party example plugin. The Super Admin plugin upload/manage UI is intentionally deferred to Phase 5.

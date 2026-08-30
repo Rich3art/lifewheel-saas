@@ -42,18 +42,50 @@ plugins/
   "version": "1.0.0",
   "author": "Ranks Media",
   "description": "LifeWheel assessments and history.",
-  "core_version": "^1.0",
-  "php": ">=8.2",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/LifeWheelPlugin.php",
+  "class": "LifeWheel\\Plugins\\LifeWheel\\LifeWheelPlugin",
   "dependencies": [],
-  "permissions": [],
-  "features": [],
-  "settings_sections": [],
-  "admin_menus": [],
-  "member_menus": [],
-  "events": [],
-  "jobs": []
+  "permissions": [
+    {
+      "slug": "lifewheel.use",
+      "name": "Use LifeWheel"
+    }
+  ],
+  "features": [
+    {
+      "slug": "lifewheel.use",
+      "name": "LifeWheel"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "lifewheel",
+      "label": "LifeWheel",
+      "route": "plugins.lifewheel.dashboard",
+      "location": "member",
+      "sort": 10
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "lifewheel.settings",
+      "label": "LifeWheel",
+      "audience": "admin",
+      "sort": 10
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
 }
 ```
+
+The manifest is validated by `App\Plugins\PluginManifest`. The plugin `id` must be lowercase and URL-safe. The `entry` file must resolve under the plugin `src/` directory and the declared `class` must implement `App\Plugins\Contracts\Plugin`.
 
 ## Lifecycle
 
@@ -64,6 +96,8 @@ plugins/
 - `deactivate()`: disable runtime behavior without deleting data.
 - `upgrade()`: apply versioned migrations and compatibility steps.
 - `uninstall()`: remove registration; data deletion requires separate explicit confirmation.
+
+The current implementation stores installed plugins in the `plugins` table and stores declared plugin permissions, features, menus, and settings sections in dedicated registration tables. Enabled plugins are loaded by `App\Providers\AppServiceProvider`; plugin routes and migrations are only loaded for plugins with `status = enabled`.
 
 ## Dependency Rules
 
@@ -83,3 +117,5 @@ Disable, delete files, and uninstall with data removal are separate operations.
 ## Security Limitation
 
 PHP plugin upload means server-side executable code upload. On ordinary shared hosting, plugins cannot be strongly sandboxed. Only trusted plugins should be installed.
+
+Phase 5 will add the Super Admin upload/install/update UI and enforce ZIP validation, zip-slip prevention, file allow/deny rules, size limits, and destructive uninstall confirmations.
