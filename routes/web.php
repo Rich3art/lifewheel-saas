@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\FeatureController as AdminFeatureController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
+use App\Http\Controllers\Admin\BlogTaxonomyController as AdminBlogTaxonomyController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\PluginController as AdminPluginController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
@@ -15,14 +18,18 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/health', HealthController::class)->name('health');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -121,4 +128,27 @@ Route::prefix('admin')
             Route::put('/packages/{package}', [AdminPackageController::class, 'update'])->name('packages.update');
             Route::post('/packages/{package}/duplicate', [AdminPackageController::class, 'duplicate'])->name('packages.duplicate');
         });
+
+        Route::middleware('permission:admin.pages.manage')->group(function (): void {
+            Route::get('/pages', [AdminPageController::class, 'index'])->name('pages.index');
+            Route::get('/pages/create', [AdminPageController::class, 'create'])->name('pages.create');
+            Route::post('/pages', [AdminPageController::class, 'store'])->name('pages.store');
+            Route::get('/pages/{page}/edit', [AdminPageController::class, 'edit'])->name('pages.edit');
+            Route::put('/pages/{page}', [AdminPageController::class, 'update'])->name('pages.update');
+        });
+
+        Route::middleware('permission:admin.blog.manage')->group(function (): void {
+            Route::get('/blog', [AdminBlogPostController::class, 'index'])->name('blog.index');
+            Route::get('/blog/create', [AdminBlogPostController::class, 'create'])->name('blog.create');
+            Route::post('/blog', [AdminBlogPostController::class, 'store'])->name('blog.store');
+            Route::get('/blog/{post}/edit', [AdminBlogPostController::class, 'edit'])->name('blog.edit');
+            Route::put('/blog/{post}', [AdminBlogPostController::class, 'update'])->name('blog.update');
+            Route::get('/blog-taxonomy', [AdminBlogTaxonomyController::class, 'index'])->name('blog.taxonomy');
+            Route::post('/blog-categories', [AdminBlogTaxonomyController::class, 'storeCategory'])->name('blog.categories.store');
+            Route::post('/blog-tags', [AdminBlogTaxonomyController::class, 'storeTag'])->name('blog.tags.store');
+        });
     });
+
+Route::get('/{slug}', [PageController::class, 'show'])
+    ->where('slug', '^(?!admin|app|login|register|forgot-password|reset-password|email|security|health|blog).*$')
+    ->name('pages.show');

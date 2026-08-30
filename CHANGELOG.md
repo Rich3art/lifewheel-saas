@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 7
+
+- Added Core CMS pages with public rendering, admin editing, SEO metadata, legal page flags, and page version snapshots.
+- Added Core blog with public index/detail pages, admin post editing, revisions, categories, tags, and publishing states.
+- Seeded default public pages and added CMS/blog authorization and publishing tests.
+
 ### Phase 6
 
 - Added Core SaaS feature registry, packages, package features, package limits, user packages, user feature overrides, and entitlement service.

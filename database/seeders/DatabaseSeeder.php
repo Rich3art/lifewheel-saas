@@ -10,5 +10,6 @@ final class DatabaseSeeder extends Seeder
     {
         $this->call(RbacSeeder::class);
         $this->call(SaasSeeder::class);
+        $this->call(CmsSeeder::class);
     }
 }

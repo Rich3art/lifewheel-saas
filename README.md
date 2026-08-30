@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 6 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 7 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -38,6 +38,7 @@ Start here:
 - [Phase 4 Core Plugin System](docs/PHASE_4_CORE_PLUGIN_SYSTEM.md)
 - [Phase 5 Core Plugin Admin](docs/PHASE_5_CORE_PLUGIN_ADMIN.md)
 - [Phase 6 Core SaaS Features And Packages](docs/PHASE_6_CORE_SAAS_FEATURES_PACKAGES.md)
+- [Phase 7 Core CMS Blog And Public Pages](docs/PHASE_7_CORE_CMS_BLOG_PUBLIC_PAGES.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -70,3 +71,7 @@ Phase 5 adds the permission-gated Super Admin plugin manager for installing, ena
 ## Current SaaS Foundation
 
 Phase 6 adds the central feature registry, editable packages, package limits, user package assignment, user-level feature overrides, and server-side entitlement checks.
+
+## Current CMS Foundation
+
+Phase 7 adds database-backed public pages, legal page version snapshots, blog posts, revisions, categories, tags, SEO fields, and admin-only publishing routes.
