@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureTwoFactorVerified;
+use App\Http\Middleware\EnsureFeatureEntitlement;
 use App\Http\Middleware\EnsurePermission;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\SecurityHeaders;
@@ -33,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => Authenticate::class,
             'csrf' => ValidateCsrfToken::class,
             'guest' => RedirectIfAuthenticated::class,
+            'feature' => EnsureFeatureEntitlement::class,
             'permission' => EnsurePermission::class,
             'signed' => ValidateSignature::class,
             'throttle' => ThrottleRequests::class,

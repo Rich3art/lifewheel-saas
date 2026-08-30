@@ -33,6 +33,12 @@
                     <strong class="mt-3 block text-xl">Manage extensions</strong>
                 </a>
             @endcan
+            @can('admin.saas.manage')
+                <a href="{{ route('admin.packages.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
+                    <span class="text-sm text-zinc-400">SaaS</span>
+                    <strong class="mt-3 block text-xl">Packages and features</strong>
+                </a>
+            @endcan
         </div>
     </main>
 </x-layouts.app>

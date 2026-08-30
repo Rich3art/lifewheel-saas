@@ -27,6 +27,46 @@
         </section>
 
         <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <h2 class="text-lg font-semibold">Package</h2>
+            <form method="POST" action="{{ route('admin.users.packages.update', $user) }}" class="mt-5 grid gap-4 sm:grid-cols-[1fr_1fr_auto]">
+                @csrf
+                @method('PUT')
+                <select name="package_id" class="rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-sm">
+                    <option value="">No package</option>
+                    @foreach ($packages as $package)
+                        <option value="{{ $package->id }}" @selected($user->packages->contains($package))>{{ $package->name }}</option>
+                    @endforeach
+                </select>
+                <input name="ends_at" type="date" class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
+                <button class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950">Assign</button>
+            </form>
+        </section>
+
+        <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <h2 class="text-lg font-semibold">Feature overrides</h2>
+            <form method="POST" action="{{ route('admin.users.feature-overrides.update', $user) }}" class="mt-5 space-y-4">
+                @csrf
+                @method('PUT')
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach ($features as $feature)
+                        @php $override = $user->featureOverrides->firstWhere('feature_id', $feature->id); @endphp
+                        <label class="rounded-xl border border-white/10 bg-black/20 p-4 text-sm">
+                            <span class="block font-medium text-white">{{ $feature->name }}</span>
+                            <span class="block text-zinc-400">{{ $feature->slug }}</span>
+                            <select name="overrides[{{ $feature->id }}]" class="mt-3 w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-xs">
+                                <option value="">Use package</option>
+                                <option value="grant" @selected($override?->enabled === true)>Grant</option>
+                                <option value="deny" @selected($override?->enabled === false)>Deny</option>
+                            </select>
+                        </label>
+                    @endforeach
+                </div>
+                <input name="reason" placeholder="Reason for override" class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
+                <button class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950">Save overrides</button>
+            </form>
+        </section>
+
+        <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h2 class="text-lg font-semibold">Direct permissions</h2>
             <form method="POST" action="{{ route('admin.users.permissions.update', $user) }}" class="mt-5 space-y-4">
                 @csrf

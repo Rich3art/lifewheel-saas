@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 6
+
+- Added Core SaaS feature registry, packages, package features, package limits, user packages, user feature overrides, and entitlement service.
+- Added SaaS admin screens for managing features and packages plus user package/override controls.
+- Added default editable Free, Lessons, and Premium AI package seed data and entitlement tests.
+
 ### Phase 5
 
 - Added Super Admin plugin management UI, routes, controller, and dashboard entry.

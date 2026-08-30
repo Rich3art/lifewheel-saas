@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\FeatureController as AdminFeatureController;
+use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\PluginController as AdminPluginController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
@@ -82,6 +84,8 @@ Route::prefix('admin')
             Route::get('/users/{user}', [AdminUserController::class, 'edit'])->name('users.edit');
             Route::put('/users/{user}/roles', [AdminUserController::class, 'updateRoles'])->name('users.roles.update');
             Route::put('/users/{user}/permissions', [AdminUserController::class, 'updatePermissions'])->name('users.permissions.update');
+            Route::put('/users/{user}/packages', [AdminUserController::class, 'updatePackages'])->name('users.packages.update');
+            Route::put('/users/{user}/feature-overrides', [AdminUserController::class, 'updateFeatureOverrides'])->name('users.feature-overrides.update');
             Route::put('/users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
             Route::put('/users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');
         });
@@ -106,5 +110,15 @@ Route::prefix('admin')
             Route::post('/plugins/{pluginId}/update', [AdminPluginController::class, 'update'])->name('plugins.update');
             Route::delete('/plugins/{pluginId}/uninstall', [AdminPluginController::class, 'uninstall'])->name('plugins.uninstall');
             Route::delete('/plugins/{pluginId}/files', [AdminPluginController::class, 'deleteFiles'])->name('plugins.files.delete');
+        });
+
+        Route::middleware('permission:admin.saas.manage')->group(function (): void {
+            Route::get('/features', [AdminFeatureController::class, 'index'])->name('features.index');
+            Route::post('/features', [AdminFeatureController::class, 'store'])->name('features.store');
+            Route::put('/features/{feature}', [AdminFeatureController::class, 'update'])->name('features.update');
+            Route::get('/packages', [AdminPackageController::class, 'index'])->name('packages.index');
+            Route::post('/packages', [AdminPackageController::class, 'store'])->name('packages.store');
+            Route::put('/packages/{package}', [AdminPackageController::class, 'update'])->name('packages.update');
+            Route::post('/packages/{package}/duplicate', [AdminPackageController::class, 'duplicate'])->name('packages.duplicate');
         });
     });

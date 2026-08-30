@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -88,5 +89,17 @@ final class User extends Authenticatable implements MustVerifyEmail
     public function isSuspended(): bool
     {
         return $this->suspended_at !== null;
+    }
+
+    public function packages(): BelongsToMany
+    {
+        return $this->belongsToMany(Package::class, 'user_packages')
+            ->withPivot(['status', 'starts_at', 'ends_at', 'assigned_by'])
+            ->withTimestamps();
+    }
+
+    public function featureOverrides(): HasMany
+    {
+        return $this->hasMany(UserFeatureOverride::class);
     }
 }
