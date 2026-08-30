@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 1
+
+- Added Laravel 12 project foundation for PHP 8.2+ and cPanel shared hosting.
+- Added public front controller, Apache rewrite/security headers, routes, controllers, Blade shells, Vite/Tailwind assets, environment template, infrastructure migrations, and PHPUnit smoke tests.
+- Documented local Composer/OpenSSL blocker.
+
 ### Phase 0
 
 - Audited upstream `jmoraispk/2nd-brain-plugin`.

@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 0 is the active baseline. The project is being redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 1 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -32,6 +32,7 @@ This project is phase-gated. At the end of every phase:
 Start here:
 
 - [Phase 0 Audit And Final Architecture](docs/PHASE_0_AUDIT_AND_ARCHITECTURE.md)
+- [Phase 1 Core Foundation](docs/PHASE_1_CORE_FOUNDATION.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
