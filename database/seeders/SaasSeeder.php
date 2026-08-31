@@ -23,6 +23,7 @@ final class SaasSeeder extends Seeder
             ['name' => 'Projects', 'slug' => 'projects.use'],
             ['name' => 'Project Tasks', 'slug' => 'projects.tasks'],
             ['name' => 'Lessons', 'slug' => 'lessons.use'],
+            ['name' => 'Lessons Search', 'slug' => 'lessons.search'],
             ['name' => 'AI Analysis', 'slug' => 'ai.analysis'],
             ['name' => 'AI Coach', 'slug' => 'ai.coach'],
             ['name' => 'AI Reviews', 'slug' => 'ai.reviews'],
@@ -81,7 +82,7 @@ final class SaasSeeder extends Seeder
 
         $lessons->features()->syncWithoutDetaching($features->only([
             'lifewheel.use', 'lifewheel.history', 'journal.use', 'journal.search', 'goals.use', 'goals.progress', 'habits.use', 'habits.stats', 'projects.use', 'projects.tasks',
-            'lessons.use', 'forum.use', 'gamification.use',
+            'lessons.use', 'lessons.search', 'forum.use', 'gamification.use',
         ])->pluck('id')->mapWithKeys(fn ($id): array => [$id => ['enabled' => true]])->all());
 
         $premium->features()->syncWithoutDetaching($features->pluck('id')->mapWithKeys(fn ($id): array => [$id => ['enabled' => true]])->all());

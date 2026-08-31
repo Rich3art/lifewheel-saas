@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 15 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 16 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -47,6 +47,7 @@ Start here:
 - [Phase 13 Projects Plugin](docs/PHASE_13_PROJECTS_PLUGIN.md)
 - [Phase 14 Gamification Plugin](docs/PHASE_14_GAMIFICATION_PLUGIN.md)
 - [Phase 15 Core AI Service](docs/PHASE_15_CORE_AI_SERVICE.md)
+- [Phase 16 Lessons Plugin](docs/PHASE_16_LESSONS_PLUGIN.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -115,3 +116,7 @@ Phase 14 adds a first-party gamification plugin with an XP ledger, configurable 
 ## Current AI Service Foundation
 
 Phase 15 adds the Core AI provider abstraction, encrypted provider settings, model routing, usage metering, entitlement checks, mock local fallback, and Super Admin AI settings screens.
+
+## Current Lessons Plugin
+
+Phase 16 adds a first-party lessons ledger plugin with member-only lesson CRUD, LifeWheel area links, source metadata, idempotency-ready storage, entitlement-gated search, and plugin-owned migrations/routes/views.

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 16
+
+- Added first-party Lessons plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and domain event.
+- Added durable lesson CRUD with LifeWheel area links, source metadata, learned dates, and idempotency-ready storage.
+- Added entitlement-gated lessons search using `lessons.search`.
+- Added `lessons.search` to editable SaaS feature seeds for Lessons and Premium packages.
+- Documented Lessons plugin boundaries, ownership checks, and deferred AI extraction work.
+
 ### Phase 15
 
 - Added Core AI provider, model route, and usage event tables.

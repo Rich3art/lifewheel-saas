@@ -1,0 +1,46 @@
+{
+  "id": "lessons",
+  "name": "Lessons",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party lessons ledger plugin for durable user insights over time.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/LessonsPlugin.php",
+  "class": "LifeWheel\\Plugins\\Lessons\\LessonsPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "lessons.use",
+      "name": "Use Lessons"
+    },
+    {
+      "slug": "lessons.search",
+      "name": "Search Lessons"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "lessons",
+      "label": "Lessons",
+      "route": "plugins.lessons.index",
+      "location": "member",
+      "sort": 160
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "lessons.settings",
+      "label": "Lessons",
+      "audience": "member",
+      "sort": 160
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}
