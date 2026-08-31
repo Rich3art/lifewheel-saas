@@ -1,0 +1,46 @@
+{
+  "id": "projects",
+  "name": "Projects",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party projects plugin for multi-step outcomes, project tasks, and LifeWheel area links.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/ProjectsPlugin.php",
+  "class": "LifeWheel\\Plugins\\Projects\\ProjectsPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "projects.use",
+      "name": "Use Projects"
+    },
+    {
+      "slug": "projects.tasks",
+      "name": "Manage Project Tasks"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "projects",
+      "label": "Projects",
+      "route": "plugins.projects.index",
+      "location": "member",
+      "sort": 150
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "projects.settings",
+      "label": "Projects",
+      "audience": "member",
+      "sort": 150
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

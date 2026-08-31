@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 13
+
+- Added first-party Projects plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain events.
+- Added project CRUD with LifeWheel area links, statuses, priorities, start dates, and due dates.
+- Added project tasks, task completion, and task-based project completion calculation.
+- Added `projects.tasks` to the editable SaaS feature registry and default package seeds.
+- Documented Projects plugin boundaries, ownership checks, and deferred goal/habit linking.
+
 ### Phase 12
 
 - Added first-party Habits plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain event.
