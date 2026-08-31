@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 20
+
+- Added first-party Forum/Social/Messaging plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and access helper.
+- Added forum categories, topics, replies, social profiles, follows, blocks, direct conversations, messages, and member reports.
+- Added feature entitlements for forum access, topic creation, replies, direct messages, and follows.
+- Added plugin-owned `forum.moderate` permission and moderation report queue.
+- Added tests covering manifest validity, entitlement denial, topic/reply creation, reply feature denial, message participant ownership, blocking, private-message report visibility, and moderation permission.
+
 ### Phase 19
 
 - Added first-party AI Reviews plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, response schema, and context builder.

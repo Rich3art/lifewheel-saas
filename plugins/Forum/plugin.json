@@ -1,0 +1,77 @@
+{
+  "id": "forum",
+  "name": "Forum Social Messaging",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party community forum, following, blocking, reporting, and private messaging plugin.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/ForumPlugin.php",
+  "class": "LifeWheel\\Plugins\\Forum\\ForumPlugin",
+  "dependencies": [],
+  "permissions": [
+    {
+      "slug": "forum.moderate",
+      "name": "Moderate forum and social reports"
+    }
+  ],
+  "features": [
+    {
+      "slug": "forum.use",
+      "name": "Community Forum"
+    },
+    {
+      "slug": "forum.create_topic",
+      "name": "Create Forum Topics"
+    },
+    {
+      "slug": "forum.reply",
+      "name": "Reply In Forum"
+    },
+    {
+      "slug": "forum.message",
+      "name": "Direct Messaging"
+    },
+    {
+      "slug": "forum.follow",
+      "name": "Member Following"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "community",
+      "label": "Community",
+      "route": "plugins.forum.index",
+      "location": "member",
+      "sort": 400
+    },
+    {
+      "slug": "messages",
+      "label": "Messages",
+      "route": "plugins.forum.messages.index",
+      "location": "member",
+      "sort": 410
+    },
+    {
+      "slug": "forum-moderation",
+      "label": "Forum Moderation",
+      "route": "plugins.forum.admin.reports",
+      "location": "admin",
+      "sort": 400
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "forum.settings",
+      "label": "Community Settings",
+      "audience": "member",
+      "sort": 400
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}
