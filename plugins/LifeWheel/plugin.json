@@ -1,0 +1,50 @@
+{
+  "id": "lifewheel",
+  "name": "LifeWheel",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party LifeWheel assessment plugin with historical scores, wheel chart, trends, and member dashboard widgets.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/LifeWheelPlugin.php",
+  "class": "LifeWheel\\Plugins\\LifeWheel\\LifeWheelPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "lifewheel.use",
+      "name": "Use LifeWheel"
+    },
+    {
+      "slug": "lifewheel.history",
+      "name": "View LifeWheel history"
+    },
+    {
+      "slug": "lifewheel.analytics",
+      "name": "View LifeWheel analytics"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "lifewheel",
+      "label": "LifeWheel",
+      "route": "plugins.lifewheel.index",
+      "location": "member",
+      "sort": 100
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "lifewheel.settings",
+      "label": "LifeWheel",
+      "audience": "member",
+      "sort": 100
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

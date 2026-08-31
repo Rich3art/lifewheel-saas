@@ -13,6 +13,7 @@ final class SaasSeeder extends Seeder
         $features = collect([
             ['name' => 'LifeWheel', 'slug' => 'lifewheel.use'],
             ['name' => 'LifeWheel History', 'slug' => 'lifewheel.history'],
+            ['name' => 'LifeWheel Analytics', 'slug' => 'lifewheel.analytics'],
             ['name' => 'Goals', 'slug' => 'goals.use'],
             ['name' => 'Habits', 'slug' => 'habits.use'],
             ['name' => 'Projects', 'slug' => 'projects.use'],

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Phase 9
+
+- Added first-party LifeWheel plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain event.
+- Added LifeWheel assessment form, append-only history, overall score calculation, SVG wheel chart, ranking, and previous-score comparison.
+- Added `lifewheel.analytics` to the editable SaaS feature registry.
+- Documented LifeWheel plugin boundaries, security checks, and deferred AI/question-bank work.
+
 ### Phase 8
 
 - Added data-driven member settings section registry and Super Admin visibility controls.
