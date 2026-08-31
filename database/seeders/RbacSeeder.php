@@ -22,6 +22,7 @@ final class RbacSeeder extends Seeder
             ['name' => 'Manage blog', 'slug' => 'admin.blog.manage'],
             ['name' => 'Manage member settings', 'slug' => 'admin.member_settings.manage'],
             ['name' => 'Manage privacy requests', 'slug' => 'admin.privacy.manage'],
+            ['name' => 'Manage AI settings', 'slug' => 'admin.ai.manage'],
         ])->mapWithKeys(function (array $permission): array {
             return [
                 $permission['slug'] => Permission::query()->firstOrCreate(

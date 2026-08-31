@@ -63,6 +63,12 @@
                     <strong class="mt-3 block text-xl">Requests queue</strong>
                 </a>
             @endcan
+            @can('admin.ai.manage')
+                <a href="{{ route('admin.ai.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
+                    <span class="text-sm text-zinc-400">AI</span>
+                    <strong class="mt-3 block text-xl">Providers and routing</strong>
+                </a>
+            @endcan
         </div>
     </main>
 </x-layouts.app>

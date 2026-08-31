@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Admin\BlogTaxonomyController as AdminBlogTaxonomyController;
+use App\Http\Controllers\Admin\AiSettingsController as AdminAiSettingsController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\PluginController as AdminPluginController;
 use App\Http\Controllers\Admin\MemberSettingsController as AdminMemberSettingsController;
@@ -162,6 +163,12 @@ Route::prefix('admin')
         Route::middleware('permission:admin.privacy.manage')->group(function (): void {
             Route::get('/privacy-requests', [AdminPrivacyRequestController::class, 'index'])->name('privacy-requests.index');
             Route::put('/privacy-requests/{privacyRequest}', [AdminPrivacyRequestController::class, 'update'])->name('privacy-requests.update');
+        });
+
+        Route::middleware('permission:admin.ai.manage')->group(function (): void {
+            Route::get('/ai', [AdminAiSettingsController::class, 'index'])->name('ai.index');
+            Route::put('/ai/providers/{provider}', [AdminAiSettingsController::class, 'updateProvider'])->name('ai.providers.update');
+            Route::put('/ai/routes/{route}', [AdminAiSettingsController::class, 'updateRoute'])->name('ai.routes.update');
         });
     });
 

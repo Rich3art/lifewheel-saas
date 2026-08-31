@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 15
+
+- Added Core AI provider, model route, and usage event tables.
+- Added encrypted provider settings, provider-neutral request/response DTOs, AI gateway, mock provider, OpenAI client, and Anthropic client.
+- Added Super Admin AI settings screens and `admin.ai.manage` permission.
+- Added seeded mock/OpenAI/Anthropic providers and default AI feature routes.
+- Added tests covering AI admin authorization, encrypted secret handling, entitlement checks, usage recording, and monthly route limits.
+
 ### Phase 14
 
 - Added first-party Gamification plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and LifeWheel assessment listener.
