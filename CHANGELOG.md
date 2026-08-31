@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 12
+
+- Added first-party Habits plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain event.
+- Added positive, quit, and numeric habit definitions with LifeWheel area links, weekdays, targets, units, statuses, and notes.
+- Added daily habit logging with one log per habit/date and recent history display.
+- Added 28-day adherence calculation and `habits.stats` feature registration.
+- Documented Habits plugin boundaries, ownership checks, and deferred advanced streak/AI work.
+
 ### Phase 11
 
 - Added first-party Goals plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain events.

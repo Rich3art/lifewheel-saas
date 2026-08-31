@@ -1,0 +1,46 @@
+{
+  "id": "habits",
+  "name": "Habits",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party habits plugin with positive, quit, and numeric habit tracking.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/HabitsPlugin.php",
+  "class": "LifeWheel\\Plugins\\Habits\\HabitsPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "habits.use",
+      "name": "Use Habits"
+    },
+    {
+      "slug": "habits.stats",
+      "name": "View Habit Statistics"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "habits",
+      "label": "Habits",
+      "route": "plugins.habits.index",
+      "location": "member",
+      "sort": 140
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "habits.settings",
+      "label": "Habits",
+      "audience": "member",
+      "sort": 140
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

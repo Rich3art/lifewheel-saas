@@ -19,6 +19,7 @@ final class SaasSeeder extends Seeder
             ['name' => 'Goals', 'slug' => 'goals.use'],
             ['name' => 'Goal Progress Tracking', 'slug' => 'goals.progress'],
             ['name' => 'Habits', 'slug' => 'habits.use'],
+            ['name' => 'Habit Statistics', 'slug' => 'habits.stats'],
             ['name' => 'Projects', 'slug' => 'projects.use'],
             ['name' => 'Lessons', 'slug' => 'lessons.use'],
             ['name' => 'AI Analysis', 'slug' => 'ai.analysis'],
@@ -73,12 +74,12 @@ final class SaasSeeder extends Seeder
         ]);
 
         $free->features()->syncWithoutDetaching($features->only([
-            'lifewheel.use', 'lifewheel.history', 'journal.use', 'journal.search', 'goals.use', 'goals.progress', 'habits.use', 'projects.use',
+            'lifewheel.use', 'lifewheel.history', 'journal.use', 'journal.search', 'goals.use', 'goals.progress', 'habits.use', 'habits.stats', 'projects.use',
             'forum.use', 'gamification.use',
         ])->pluck('id')->mapWithKeys(fn ($id): array => [$id => ['enabled' => true]])->all());
 
         $lessons->features()->syncWithoutDetaching($features->only([
-            'lifewheel.use', 'lifewheel.history', 'journal.use', 'journal.search', 'goals.use', 'goals.progress', 'habits.use', 'projects.use',
+            'lifewheel.use', 'lifewheel.history', 'journal.use', 'journal.search', 'goals.use', 'goals.progress', 'habits.use', 'habits.stats', 'projects.use',
             'lessons.use', 'forum.use', 'gamification.use',
         ])->pluck('id')->mapWithKeys(fn ($id): array => [$id => ['enabled' => true]])->all());
 
