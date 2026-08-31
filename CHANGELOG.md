@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 17
+
+- Added first-party AI Life Analysis plugin with manifest, plugin-owned routes, migration, views, schema, and context builder.
+- Added structured AI life analysis generation through the Core AI gateway using the `ai.analysis` entitlement.
+- Added stored analysis history and detail views with structured analysis sections.
+- Updated mock AI provider to return schema-shaped structured outputs for local development.
+- Added tests covering manifest validity, entitlement denial, no-assessment guard, selective user context, analysis generation, usage recording, and ownership checks.
+
 ### Phase 16
 
 - Added first-party Lessons plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and domain event.

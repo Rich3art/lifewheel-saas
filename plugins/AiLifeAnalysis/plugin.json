@@ -1,0 +1,42 @@
+{
+  "id": "ai-life-analysis",
+  "name": "AI Life Analysis",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party structured AI life analysis plugin using LifeWheel history and Core AI routing.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/AiLifeAnalysisPlugin.php",
+  "class": "LifeWheel\\Plugins\\AiLifeAnalysis\\AiLifeAnalysisPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "ai.analysis",
+      "name": "AI Life Analysis"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "ai-life-analysis",
+      "label": "AI Analysis",
+      "route": "plugins.ai-life-analysis.index",
+      "location": "member",
+      "sort": 300
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "ai-life-analysis.settings",
+      "label": "AI Life Analysis",
+      "audience": "admin",
+      "sort": 300
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}
