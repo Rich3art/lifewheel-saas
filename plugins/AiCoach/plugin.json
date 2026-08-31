@@ -1,0 +1,42 @@
+{
+  "id": "ai-coach",
+  "name": "AI Coach",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party Ask My Life coaching plugin with selective private context retrieval through the Core AI gateway.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/AiCoachPlugin.php",
+  "class": "LifeWheel\\Plugins\\AiCoach\\AiCoachPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "ai.coach",
+      "name": "AI Coach"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "ai-coach",
+      "label": "AI Coach",
+      "route": "plugins.ai-coach.index",
+      "location": "member",
+      "sort": 310
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "ai-coach.settings",
+      "label": "AI Coach",
+      "audience": "admin",
+      "sort": 310
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

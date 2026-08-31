@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 18
+
+- Added first-party AI Coach plugin with manifest, plugin-owned routes, migration, views, response schema, and context builder.
+- Added private Ask My Life conversations and structured assistant message storage through the Core AI gateway using the `ai.coach` entitlement.
+- Added selective private context retrieval across LifeWheel, Journal, Goals, Habits, Projects, Lessons, and recent coach messages when those plugin tables exist.
+- Added ownership-scoped conversation routing and server-side AI usage recording for coaching messages.
+- Added tests covering manifest validity, entitlement denial, selective user context, conversation generation, usage recording, and ownership checks.
+
 ### Phase 17
 
 - Added first-party AI Life Analysis plugin with manifest, plugin-owned routes, migration, views, schema, and context builder.
