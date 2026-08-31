@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 18 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 19 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -50,6 +50,7 @@ Start here:
 - [Phase 16 Lessons Plugin](docs/PHASE_16_LESSONS_PLUGIN.md)
 - [Phase 17 AI Life Analysis Plugin](docs/PHASE_17_AI_LIFE_ANALYSIS_PLUGIN.md)
 - [Phase 18 AI Coach Plugin](docs/PHASE_18_AI_COACH_PLUGIN.md)
+- [Phase 19 AI Reviews Plugin](docs/PHASE_19_AI_REVIEWS_PLUGIN.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -130,3 +131,7 @@ Phase 17 adds a first-party AI Life Analysis plugin that uses Core AI routing, s
 ## Current AI Coach Plugin
 
 Phase 18 adds a first-party AI Coach plugin for private Ask My Life conversations, selective user-owned context retrieval, structured coaching responses, server-side AI usage metering, and entitlement-gated member routes.
+
+## Current AI Reviews Plugin
+
+Phase 19 adds a first-party AI Reviews plugin for daily, weekly, monthly, quarterly, yearly, and custom-range executive reviews using period-scoped private context and Core AI routing.

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 19
+
+- Added first-party AI Reviews plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, response schema, and context builder.
+- Added daily, weekly, monthly, quarterly, yearly, and custom-range review generation through the Core AI gateway using the `ai.reviews` entitlement.
+- Added stored AI review history with structured executive sections, period metadata, provider/model metadata, and usage recording.
+- Added selective period-scoped private context retrieval across LifeWheel, Journal, Goals, Habits, Projects, and Lessons when those plugin tables exist.
+- Added tests covering manifest validity, entitlement denial, custom period validation, context ownership, review generation, usage recording, and ownership checks.
+
 ### Phase 18
 
 - Added first-party AI Coach plugin with manifest, plugin-owned routes, migration, views, response schema, and context builder.

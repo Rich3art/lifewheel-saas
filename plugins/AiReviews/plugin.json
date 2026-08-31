@@ -1,0 +1,42 @@
+{
+  "id": "ai-reviews",
+  "name": "AI Reviews",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party AI daily, weekly, monthly, quarterly, yearly, and custom life reviews through the Core AI gateway.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/AiReviewsPlugin.php",
+  "class": "LifeWheel\\Plugins\\AiReviews\\AiReviewsPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "ai.reviews",
+      "name": "AI Reviews"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "ai-reviews",
+      "label": "AI Reviews",
+      "route": "plugins.ai-reviews.index",
+      "location": "member",
+      "sort": 320
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "ai-reviews.settings",
+      "label": "AI Reviews",
+      "audience": "admin",
+      "sort": 320
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}
