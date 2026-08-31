@@ -1,0 +1,46 @@
+{
+  "id": "gamification",
+  "name": "Gamification",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party XP ledger and gamification rules plugin.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/GamificationPlugin.php",
+  "class": "LifeWheel\\Plugins\\Gamification\\GamificationPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "gamification.use",
+      "name": "Use Gamification"
+    },
+    {
+      "slug": "gamification.admin",
+      "name": "Manage Gamification"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "gamification",
+      "label": "XP",
+      "route": "plugins.gamification.index",
+      "location": "member",
+      "sort": 900
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "gamification.settings",
+      "label": "Gamification",
+      "audience": "admin",
+      "sort": 900
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

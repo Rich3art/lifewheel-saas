@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 14
+
+- Added first-party Gamification plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and LifeWheel assessment listener.
+- Added XP ledger events, configurable gamification rules, idempotent award service, and level calculation helper.
+- Added member XP ledger page and Super Admin gamification rule editing route.
+- Added Core runtime plugin boot hook so enabled plugins can register event listeners.
+- Added tests covering XP calculation, idempotent awards, entitlement denial, event awards, and admin rule updates.
+
 ### Phase 13
 
 - Added first-party Projects plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain events.

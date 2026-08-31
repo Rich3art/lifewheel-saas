@@ -28,6 +28,7 @@ final class AppServiceProvider extends ServiceProvider
         });
 
         $this->loadEnabledPluginMigrations();
+        $this->bootEnabledPlugins();
         $this->loadEnabledPluginRoutes();
     }
 
@@ -67,6 +68,32 @@ final class AppServiceProvider extends ServiceProvider
                     }
 
                     Route::middleware('web')->group($path);
+                }
+            }
+        } catch (Throwable) {
+            return;
+        }
+    }
+
+    private function bootEnabledPlugins(): void
+    {
+        try {
+            foreach (app(PluginRegistry::class)->enabled() as $plugin) {
+                $manifest = $plugin['manifest'];
+                $context = new PluginContext($manifest, $plugin['base_path']);
+                $entry = realpath($context->path($manifest->entry));
+                $basePath = realpath($context->basePath);
+
+                if (! $entry || ! $basePath || ! str_starts_with($entry, $basePath.DIRECTORY_SEPARATOR)) {
+                    continue;
+                }
+
+                require_once $entry;
+
+                $class = $manifest->raw['class'] ?? null;
+
+                if (is_string($class) && class_exists($class)) {
+                    app($class)->boot($context);
                 }
             }
         } catch (Throwable) {
