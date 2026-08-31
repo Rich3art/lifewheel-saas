@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 11
+
+- Added first-party Goals plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain events.
+- Added measurable goal CRUD with LifeWheel area links, success criteria, baseline/current/target values, units, due dates, and statuses.
+- Added milestones, milestone completion, progress records, and evidence-based progress calculation.
+- Added `goals.progress` to the editable SaaS feature registry and default package seeds.
+- Added tests covering progress calculation, entitlement denial, ownership checks, milestones, and progress records.
+
 ### Phase 10
 
 - Added first-party Journal plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and domain event.

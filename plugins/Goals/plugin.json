@@ -1,0 +1,46 @@
+{
+  "id": "goals",
+  "name": "Goals",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party measurable goals plugin with milestones, progress records, and LifeWheel area links.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/GoalsPlugin.php",
+  "class": "LifeWheel\\Plugins\\Goals\\GoalsPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "goals.use",
+      "name": "Use Goals"
+    },
+    {
+      "slug": "goals.progress",
+      "name": "Track Goal Progress"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "goals",
+      "label": "Goals",
+      "route": "plugins.goals.index",
+      "location": "member",
+      "sort": 130
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "goals.settings",
+      "label": "Goals",
+      "audience": "member",
+      "sort": 130
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}
