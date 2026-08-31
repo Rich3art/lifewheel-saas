@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 10
+
+- Added first-party Journal plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and domain event.
+- Added private journal entry CRUD with title, body, LifeWheel area links, mood, energy, and entry date.
+- Added entitlement-gated journal search using `journal.search`.
+- Added `journal.use` and `journal.search` to the editable SaaS feature registry and default package seeds.
+- Documented Journal plugin boundaries, security checks, and deferred richer editor/media work.
+
 ### Phase 9
 
 - Added first-party LifeWheel plugin with manifest, lifecycle entrypoint, plugin-owned routes, migrations, views, and domain event.

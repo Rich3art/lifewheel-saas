@@ -1,0 +1,46 @@
+{
+  "id": "journal",
+  "name": "Journal",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party private journal and capture plugin for member reflection history.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/JournalPlugin.php",
+  "class": "LifeWheel\\Plugins\\Journal\\JournalPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [
+    {
+      "slug": "journal.use",
+      "name": "Use Journal"
+    },
+    {
+      "slug": "journal.search",
+      "name": "Search Journal"
+    }
+  ],
+  "menus": [
+    {
+      "slug": "journal",
+      "label": "Journal",
+      "route": "plugins.journal.index",
+      "location": "member",
+      "sort": 120
+    }
+  ],
+  "settings_sections": [
+    {
+      "slug": "journal.settings",
+      "label": "Journal",
+      "audience": "member",
+      "sort": 120
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": [
+    "database/migrations"
+  ]
+}

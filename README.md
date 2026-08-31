@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 9 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 10 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -41,6 +41,7 @@ Start here:
 - [Phase 7 Core CMS Blog And Public Pages](docs/PHASE_7_CORE_CMS_BLOG_PUBLIC_PAGES.md)
 - [Phase 8 Core Member Settings And Privacy Foundation](docs/PHASE_8_CORE_MEMBER_SETTINGS_PRIVACY_FOUNDATION.md)
 - [Phase 9 LifeWheel Plugin](docs/PHASE_9_LIFEWHEEL_PLUGIN.md)
+- [Phase 10 Journal Plugin](docs/PHASE_10_JOURNAL_PLUGIN.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -85,3 +86,7 @@ Phase 8 adds a data-driven member settings hub, Super Admin visibility controls,
 ## Current LifeWheel Plugin
 
 Phase 9 adds the first real first-party product plugin with append-only LifeWheel assessments, score history, a wheel chart, weakest-to-strongest ranking, previous-score comparison, and plugin-owned migrations/routes/views.
+
+## Current Journal Plugin
+
+Phase 10 adds a first-party private journal plugin with member-only CRUD, mood/energy tracking, LifeWheel area links, entitlement-gated search, and plugin-owned migrations/routes/views.
