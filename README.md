@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 25 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 26 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -57,6 +57,7 @@ Start here:
 - [Phase 23 PayPal Plugin](docs/PHASE_23_PAYPAL_PLUGIN.md)
 - [Phase 24 Paystack Plugin](docs/PHASE_24_PAYSTACK_PLUGIN.md)
 - [Phase 25 Whop Plugin](docs/PHASE_25_WHOP_PLUGIN.md)
+- [Phase 26 Billing Subscription Admin](docs/PHASE_26_BILLING_SUBSCRIPTION_ADMIN.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -165,3 +166,7 @@ Phase 24 adds a first-party Paystack provider plugin with transaction payload pr
 ## Current Whop Plugin
 
 Phase 25 adds a first-party Whop provider plugin with checkout configuration payload preparation, Standard Webhooks verification, payment/membership/invoice event translation, and Billing Core integration.
+
+## Current Billing Subscription Admin
+
+Phase 26 adds real billing metrics, editable provider mappings, member package checkout selection, billing history visibility, and direct checkout authorization hardening across provider plugins.

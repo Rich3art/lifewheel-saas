@@ -87,6 +87,7 @@ Route::prefix('app')
         Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
         Route::get('/settings', MemberSettingsController::class)->name('settings');
         Route::get('/billing', [MemberBillingController::class, 'index'])->name('billing.index');
+        Route::post('/billing/checkout', [MemberBillingController::class, 'checkout'])->name('billing.checkout');
         Route::post('/privacy-requests', [MemberPrivacyRequestController::class, 'store'])->name('privacy-requests.store');
     });
 
@@ -143,6 +144,7 @@ Route::prefix('admin')
             Route::get('/billing', [AdminBillingController::class, 'index'])->name('billing.index');
             Route::put('/billing/providers/{provider}', [AdminBillingController::class, 'updateProvider'])->name('billing.providers.update');
             Route::post('/billing/mappings', [AdminBillingController::class, 'storeMapping'])->name('billing.mappings.store');
+            Route::put('/billing/mappings/{mapping}', [AdminBillingController::class, 'updateMapping'])->name('billing.mappings.update');
             Route::post('/billing/subscriptions/manual', [AdminBillingController::class, 'activateManualSubscription'])->name('billing.subscriptions.manual');
             Route::put('/billing/subscriptions/{subscription}/cancel', [AdminBillingController::class, 'cancelSubscription'])->name('billing.subscriptions.cancel');
         });

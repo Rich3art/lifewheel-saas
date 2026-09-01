@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Phase 26
+
+- Added real Super Admin billing metrics for total subscriptions, active subscriptions, past-due subscriptions, MRR, and annual run rate.
+- Added editable provider mapping management for external product IDs, price IDs, amount, currency, and active status.
+- Added member package checkout selection using active public packages and enabled provider mappings.
+- Added a centralized Core checkout router that hands package-provider mappings to enabled payment plugin checkout routes.
+- Added recent invoice and billing event visibility to the Super Admin billing console.
+- Hardened direct provider checkout services so inactive or private packages cannot be purchased through manipulated plugin URLs.
+- Added tests for billing metrics, provider mapping updates, member checkout visibility, inactive mapping denial, and provider route handoff.
+
 ### Phase 25
 
 - Added first-party Whop provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.

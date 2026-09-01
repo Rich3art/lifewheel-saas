@@ -18,6 +18,10 @@ final class PayPalCheckoutService
             throw new RuntimeException('PayPal checkout is not enabled for this package.');
         }
 
+        if (! $mapping->package->active || ! $mapping->package->public) {
+            throw new RuntimeException('PayPal checkout is not available for this package.');
+        }
+
         $amount = number_format(($mapping->amount_cents ?? $mapping->package->price_cents) / 100, 2, '.', '');
         $currency = strtoupper((string) ($mapping->currency ?? $mapping->package->currency));
 

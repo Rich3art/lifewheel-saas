@@ -4,6 +4,7 @@ namespace Tests\Feature\Billing;
 
 use App\Models\Feature;
 use App\Models\Package;
+use App\Models\PackageProviderMapping;
 use App\Models\PaymentProvider;
 use App\Models\Permission;
 use App\Models\Subscription;
@@ -12,6 +13,8 @@ use App\Services\Billing\BillingManager;
 use App\Services\Billing\BillingSubscriptionData;
 use App\Services\EntitlementService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 final class BillingCoreTest extends TestCase
@@ -108,6 +111,72 @@ final class BillingCoreTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_update_provider_mapping(): void
+    {
+        $admin = $this->billingAdmin();
+        $package = Package::factory()->create();
+        $provider = PaymentProvider::query()->create(['key' => 'stripe', 'name' => 'Stripe', 'enabled' => true]);
+        $mapping = PackageProviderMapping::query()->create([
+            'package_id' => $package->id,
+            'payment_provider_id' => $provider->id,
+            'external_product_id' => 'old_product',
+            'external_price_id' => 'old_price',
+            'amount_cents' => 1900,
+            'currency' => 'USD',
+            'active' => true,
+        ]);
+
+        $this->actingAs($admin)
+            ->put("/admin/billing/mappings/{$mapping->id}", [
+                'external_product_id' => 'new_product',
+                'external_price_id' => 'new_price',
+                'amount_cents' => 4900,
+                'currency' => 'gbp',
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('package_provider_mappings', [
+            'id' => $mapping->id,
+            'external_product_id' => 'new_product',
+            'external_price_id' => 'new_price',
+            'amount_cents' => 4900,
+            'currency' => 'GBP',
+            'active' => false,
+        ]);
+    }
+
+    public function test_admin_billing_dashboard_shows_real_subscription_metrics(): void
+    {
+        $admin = $this->billingAdmin();
+        $user = User::factory()->create();
+        $monthly = Package::factory()->create(['name' => 'Monthly Package']);
+        $yearly = Package::factory()->create(['name' => 'Yearly Package']);
+
+        app(BillingManager::class)->activateSubscription(new BillingSubscriptionData(
+            userId: $user->id,
+            packageId: $monthly->id,
+            providerKey: 'manual',
+            externalSubscriptionId: 'metric-monthly',
+            amountCents: 2000,
+            billingInterval: 'monthly',
+        ));
+        app(BillingManager::class)->activateSubscription(new BillingSubscriptionData(
+            userId: $user->id,
+            packageId: $yearly->id,
+            providerKey: 'manual',
+            externalSubscriptionId: 'metric-yearly',
+            amountCents: 12000,
+            billingInterval: 'yearly',
+        ));
+
+        $this->actingAs($admin)
+            ->get('/admin/billing')
+            ->assertOk()
+            ->assertSee('2')
+            ->assertSee('$30.00')
+            ->assertSee('$360.00');
+    }
+
     public function test_subscription_events_are_idempotent_only_when_external_event_id_exists(): void
     {
         $user = User::factory()->create();
@@ -153,6 +222,78 @@ final class BillingCoreTest extends TestCase
             ->assertOk()
             ->assertSee('Own Package')
             ->assertDontSee('Other Package');
+    }
+
+    public function test_member_billing_shows_only_public_active_packages_with_enabled_provider_mappings(): void
+    {
+        $user = User::factory()->create();
+        $publicPackage = Package::factory()->create(['name' => 'Visible Premium', 'active' => true, 'public' => true]);
+        $privatePackage = Package::factory()->create(['name' => 'Hidden Enterprise', 'active' => true, 'public' => false]);
+        $enabledProvider = PaymentProvider::query()->create(['key' => 'stripe', 'name' => 'Stripe', 'enabled' => true]);
+        $disabledProvider = PaymentProvider::query()->create(['key' => 'paypal', 'name' => 'PayPal', 'enabled' => false]);
+
+        PackageProviderMapping::query()->create([
+            'package_id' => $publicPackage->id,
+            'payment_provider_id' => $enabledProvider->id,
+            'external_price_id' => 'price_visible',
+            'active' => true,
+        ]);
+        PackageProviderMapping::query()->create([
+            'package_id' => $publicPackage->id,
+            'payment_provider_id' => $disabledProvider->id,
+            'external_price_id' => 'price_disabled',
+            'active' => true,
+        ]);
+        PackageProviderMapping::query()->create([
+            'package_id' => $privatePackage->id,
+            'payment_provider_id' => $enabledProvider->id,
+            'external_price_id' => 'price_private',
+            'active' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->get('/app/billing')
+            ->assertOk()
+            ->assertSee('Visible Premium')
+            ->assertSee('Checkout with Stripe')
+            ->assertDontSee('Checkout with PayPal')
+            ->assertDontSee('Hidden Enterprise');
+    }
+
+    public function test_member_checkout_denies_inactive_mapping(): void
+    {
+        $user = User::factory()->create();
+        $package = Package::factory()->create(['active' => true, 'public' => true]);
+        $provider = PaymentProvider::query()->create(['key' => 'stripe', 'name' => 'Stripe', 'enabled' => true]);
+        $mapping = PackageProviderMapping::query()->create([
+            'package_id' => $package->id,
+            'payment_provider_id' => $provider->id,
+            'external_price_id' => 'price_inactive',
+            'active' => false,
+        ]);
+
+        $this->actingAs($user)
+            ->post('/app/billing/checkout', ['mapping_id' => $mapping->id])
+            ->assertNotFound();
+    }
+
+    public function test_member_checkout_redirects_to_enabled_provider_route(): void
+    {
+        Route::post('/test-provider-checkout/{mapping}', fn () => back())->name('plugins.stripe.checkout');
+
+        $user = User::factory()->create();
+        $package = Package::factory()->create(['active' => true, 'public' => true]);
+        $provider = PaymentProvider::query()->create(['key' => 'stripe', 'name' => 'Stripe', 'enabled' => true]);
+        $mapping = PackageProviderMapping::query()->create([
+            'package_id' => $package->id,
+            'payment_provider_id' => $provider->id,
+            'external_price_id' => 'price_active',
+            'active' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->post('/app/billing/checkout', ['mapping_id' => $mapping->id])
+            ->assertRedirect("/test-provider-checkout/{$mapping->id}");
     }
 
     private function billingAdmin(): User

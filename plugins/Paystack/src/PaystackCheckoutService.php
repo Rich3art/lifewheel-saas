@@ -18,6 +18,10 @@ final class PaystackCheckoutService
             throw new RuntimeException('Paystack checkout is not enabled for this package.');
         }
 
+        if (! $mapping->package->active || ! $mapping->package->public) {
+            throw new RuntimeException('Paystack checkout is not available for this package.');
+        }
+
         $amount = $mapping->amount_cents ?? $mapping->package->price_cents;
         $currency = strtoupper((string) ($mapping->currency ?? $mapping->package->currency));
 

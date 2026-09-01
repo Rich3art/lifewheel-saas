@@ -33,4 +33,14 @@ final class Package extends Model
     {
         return $this->hasMany(PackageLimit::class);
     }
+
+    public function providerMappings(): HasMany
+    {
+        return $this->hasMany(PackageProviderMapping::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

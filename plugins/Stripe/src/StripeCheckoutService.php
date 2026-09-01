@@ -18,6 +18,10 @@ final class StripeCheckoutService
             throw new RuntimeException('Stripe checkout is not enabled for this package.');
         }
 
+        if (! $mapping->package->active || ! $mapping->package->public) {
+            throw new RuntimeException('Stripe checkout is not available for this package.');
+        }
+
         if (! $mapping->external_price_id) {
             throw new RuntimeException('Stripe price mapping is missing.');
         }

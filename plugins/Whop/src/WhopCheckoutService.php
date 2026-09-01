@@ -18,6 +18,10 @@ final class WhopCheckoutService
             throw new RuntimeException('Whop checkout is not enabled for this package.');
         }
 
+        if (! $mapping->package->active || ! $mapping->package->public) {
+            throw new RuntimeException('Whop checkout is not available for this package.');
+        }
+
         if (! $mapping->external_price_id && ! $mapping->external_product_id) {
             throw new RuntimeException('Whop plan or product mapping is missing.');
         }

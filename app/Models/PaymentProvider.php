@@ -23,4 +23,9 @@ final class PaymentProvider extends Model
     {
         return $this->hasMany(PackageProviderMapping::class);
     }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }
