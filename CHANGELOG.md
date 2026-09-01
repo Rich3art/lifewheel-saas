@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 24
+
+- Added first-party Paystack provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.
+- Added Paystack transaction initialization payload preparation for active provider package mappings.
+- Added verified Paystack webhook route using HMAC-SHA512 verification of `x-paystack-signature` against the raw request body and secret key.
+- Added Paystack webhook handling for charge success, subscription status events, invoice events, and ignored events.
+- Integrated Paystack webhook events with Billing Core subscription activation, cancellation, invoice recording, entitlement sync, and idempotent event storage.
+- Added tests covering manifest validity, invalid signature rejection, verified charge activation, entitlement sync, duplicate webhook idempotency, and disabled mapping denial.
+
 ### Phase 23
 
 - Added first-party PayPal provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.

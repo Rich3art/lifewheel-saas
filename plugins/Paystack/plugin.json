@@ -1,0 +1,27 @@
+{
+  "id": "paystack",
+  "name": "Paystack",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party Paystack billing provider plugin for transaction initialization payloads and verified subscription webhooks.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/PaystackPlugin.php",
+  "class": "LifeWheel\\Plugins\\Paystack\\PaystackPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [],
+  "menus": [],
+  "settings_sections": [
+    {
+      "slug": "paystack.settings",
+      "label": "Paystack",
+      "audience": "admin",
+      "sort": 520
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": []
+}
