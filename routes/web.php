@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\BillingController as AdminBillingController;
 use App\Http\Controllers\Admin\FeatureController as AdminFeatureController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\BillingController as MemberBillingController;
 use App\Http\Controllers\Member\PrivacyRequestController as MemberPrivacyRequestController;
 use App\Http\Controllers\Member\SettingsController as MemberSettingsController;
 use App\Http\Controllers\PageController;
@@ -84,6 +86,7 @@ Route::prefix('app')
     ->group(function (): void {
         Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
         Route::get('/settings', MemberSettingsController::class)->name('settings');
+        Route::get('/billing', [MemberBillingController::class, 'index'])->name('billing.index');
         Route::post('/privacy-requests', [MemberPrivacyRequestController::class, 'store'])->name('privacy-requests.store');
     });
 
@@ -134,6 +137,14 @@ Route::prefix('admin')
             Route::post('/packages', [AdminPackageController::class, 'store'])->name('packages.store');
             Route::put('/packages/{package}', [AdminPackageController::class, 'update'])->name('packages.update');
             Route::post('/packages/{package}/duplicate', [AdminPackageController::class, 'duplicate'])->name('packages.duplicate');
+        });
+
+        Route::middleware('permission:admin.billing.manage')->group(function (): void {
+            Route::get('/billing', [AdminBillingController::class, 'index'])->name('billing.index');
+            Route::put('/billing/providers/{provider}', [AdminBillingController::class, 'updateProvider'])->name('billing.providers.update');
+            Route::post('/billing/mappings', [AdminBillingController::class, 'storeMapping'])->name('billing.mappings.store');
+            Route::post('/billing/subscriptions/manual', [AdminBillingController::class, 'activateManualSubscription'])->name('billing.subscriptions.manual');
+            Route::put('/billing/subscriptions/{subscription}/cancel', [AdminBillingController::class, 'cancelSubscription'])->name('billing.subscriptions.cancel');
         });
 
         Route::middleware('permission:admin.pages.manage')->group(function (): void {

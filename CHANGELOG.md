@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 21
+
+- Added Core billing tables for payment providers, package-provider mappings, normalized subscriptions, subscription events, and billing invoices.
+- Added billing models and provider-neutral `BillingManager` service for activation, entitlement sync, cancellation, invoice recording, and idempotent event recording.
+- Added Super Admin billing console for providers, package mappings, manual subscription activation, and cancellation.
+- Added member billing history page scoped to the authenticated user.
+- Added `admin.billing.manage` permission and default provider seed records for manual, Stripe, PayPal, Paystack, and Whop.
+- Added tests covering admin authorization, manual activation, entitlement sync, immediate cancellation, provider mappings, and member billing privacy.
+
 ### Phase 20
 
 - Added first-party Forum/Social/Messaging plugin with manifest, lifecycle entrypoint, plugin-owned routes, migration, views, and access helper.

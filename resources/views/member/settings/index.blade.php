@@ -69,6 +69,7 @@
                 @if ($sections->contains('key', 'billing'))
                     <section id="billing" class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
                         <h2 class="text-lg font-semibold">Billing</h2>
+                        <a href="{{ route('member.billing.index') }}" class="mt-5 inline-flex rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950">Open billing history</a>
                         @forelse ($user->packages as $package)
                             <div class="mt-4 rounded-xl border border-white/10 px-4 py-3 text-sm text-zinc-300">
                                 {{ $package->name }} - {{ ucfirst($package->pivot->status) }}

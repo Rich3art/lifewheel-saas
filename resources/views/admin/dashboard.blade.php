@@ -39,6 +39,12 @@
                     <strong class="mt-3 block text-xl">Packages and features</strong>
                 </a>
             @endcan
+            @can('admin.billing.manage')
+                <a href="{{ route('admin.billing.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
+                    <span class="text-sm text-zinc-400">Billing</span>
+                    <strong class="mt-3 block text-xl">Subscriptions</strong>
+                </a>
+            @endcan
             @can('admin.pages.manage')
                 <a href="{{ route('admin.pages.index') }}" class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition hover:bg-white/[0.06]">
                     <span class="text-sm text-zinc-400">CMS</span>
