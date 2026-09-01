@@ -1,0 +1,27 @@
+{
+  "id": "stripe",
+  "name": "Stripe",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party Stripe billing provider plugin for checkout session preparation and verified subscription webhooks.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/StripePlugin.php",
+  "class": "LifeWheel\\Plugins\\Stripe\\StripePlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [],
+  "menus": [],
+  "settings_sections": [
+    {
+      "slug": "stripe.settings",
+      "label": "Stripe",
+      "audience": "admin",
+      "sort": 500
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": []
+}

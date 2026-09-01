@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 22
+
+- Added first-party Stripe provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.
+- Added checkout payload preparation for active Stripe package mappings without granting browser-side entitlements.
+- Added verified Stripe webhook route using raw body HMAC verification against the `Stripe-Signature` header.
+- Added Stripe webhook handling for checkout completion, subscription updates/deletion, invoice paid, and invoice payment failure.
+- Integrated Stripe webhook events with Billing Core subscription activation, cancellation, invoice recording, and idempotent subscription event storage.
+- Added tests covering manifest validity, invalid signature rejection, verified checkout activation, entitlement sync, duplicate webhook idempotency, and disabled mapping denial.
+
 ### Phase 21
 
 - Added Core billing tables for payment providers, package-provider mappings, normalized subscriptions, subscription events, and billing invoices.

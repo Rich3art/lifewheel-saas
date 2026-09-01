@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 21 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 22 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -53,6 +53,7 @@ Start here:
 - [Phase 19 AI Reviews Plugin](docs/PHASE_19_AI_REVIEWS_PLUGIN.md)
 - [Phase 20 Forum Social Messaging Plugin](docs/PHASE_20_FORUM_SOCIAL_MESSAGING_PLUGIN.md)
 - [Phase 21 Billing Core](docs/PHASE_21_BILLING_CORE.md)
+- [Phase 22 Stripe Plugin](docs/PHASE_22_STRIPE_PLUGIN.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -145,3 +146,7 @@ Phase 20 adds a first-party community plugin with forum categories, topics, repl
 ## Current Billing Core
 
 Phase 21 adds provider-neutral billing infrastructure with payment providers, package-provider mappings, normalized subscriptions, subscription events, invoices, a billing service, Super Admin billing console, and member billing history.
+
+## Current Stripe Plugin
+
+Phase 22 adds a first-party Stripe provider plugin with checkout payload preparation, verified webhook handling, subscription/invoice event translation, and Billing Core integration.
