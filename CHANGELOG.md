@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 23
+
+- Added first-party PayPal provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.
+- Added PayPal checkout order payload preparation for active provider package mappings.
+- Added verified PayPal webhook route using raw-body CRC32, configured webhook ID, PayPal transmission headers, certificate URL, and RSA signature verification.
+- Added PayPal webhook handling for order approval, payment capture completion, subscription activation/update/cancellation/expiry/suspension, and ignored events.
+- Integrated PayPal webhook events with Billing Core subscription activation, cancellation, entitlement sync, and idempotent subscription event storage.
+- Added tests covering manifest validity, invalid signature rejection, verified payment activation, entitlement sync, duplicate webhook idempotency, and disabled mapping denial.
+
 ### Phase 22
 
 - Added first-party Stripe provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.

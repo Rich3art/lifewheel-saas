@@ -1,0 +1,27 @@
+{
+  "id": "paypal",
+  "name": "PayPal",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party PayPal billing provider plugin for checkout order preparation and verified subscription/payment webhooks.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/PayPalPlugin.php",
+  "class": "LifeWheel\\Plugins\\PayPal\\PayPalPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [],
+  "menus": [],
+  "settings_sections": [
+    {
+      "slug": "paypal.settings",
+      "label": "PayPal",
+      "audience": "admin",
+      "sort": 510
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": []
+}
