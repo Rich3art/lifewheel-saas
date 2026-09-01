@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Phase 25
+
+- Added first-party Whop provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.
+- Added Whop checkout configuration payload preparation for active provider package mappings.
+- Added verified Whop webhook route using Standard Webhooks HMAC-SHA256 verification over `{webhook-id}.{webhook-timestamp}.{raw body}`.
+- Added replay protection for stale Whop webhook timestamps.
+- Added Whop webhook handling for payment success, membership activation/deactivation, membership cancel-at-period-end changes, invoice events, and ignored events.
+- Integrated Whop webhook events with Billing Core subscription activation, cancellation, invoice recording, entitlement sync, and idempotent delivery storage.
+- Added tests covering manifest validity, invalid signature rejection, stale timestamp rejection, verified payment activation, entitlement sync, duplicate delivery idempotency, and disabled mapping denial.
+
 ### Phase 24
 
 - Added first-party Paystack provider plugin with manifest, lifecycle entrypoint, routes, services, documentation, and tests.

@@ -1,0 +1,27 @@
+{
+  "id": "whop",
+  "name": "Whop",
+  "version": "1.0.0",
+  "author": "Ranksmedia",
+  "description": "First-party Whop billing provider plugin for checkout configuration payloads and verified Standard Webhooks fulfillment.",
+  "core_version": "^0.4.0",
+  "php": "^8.2",
+  "entry": "src/WhopPlugin.php",
+  "class": "LifeWheel\\Plugins\\Whop\\WhopPlugin",
+  "dependencies": [],
+  "permissions": [],
+  "features": [],
+  "menus": [],
+  "settings_sections": [
+    {
+      "slug": "whop.settings",
+      "label": "Whop",
+      "audience": "admin",
+      "sort": 530
+    }
+  ],
+  "routes": [
+    "routes/web.php"
+  ],
+  "migrations": []
+}
