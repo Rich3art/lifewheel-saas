@@ -23,6 +23,11 @@ final class PluginLifecycleTest extends TestCase
 
         $activated = $service->activate('example-audit');
         $this->assertSame('enabled', $activated->status);
+        $this->assertDatabaseHas('audit_logs', [
+            'event' => 'plugin.activated',
+            'subject_type' => InstalledPlugin::class,
+            'subject_id' => 'example-audit',
+        ]);
     }
 
     public function test_lifecycle_prevents_deactivation_when_enabled_plugin_depends_on_it(): void

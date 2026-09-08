@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('actor_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('event');
             $table->string('subject_type')->nullable();
-            $table->unsignedBigInteger('subject_id')->nullable();
+            $table->string('subject_id')->nullable();
             $table->string('ip_address', 45)->nullable();
             $table->string('user_agent', 500)->nullable();
             $table->json('metadata')->nullable();
