@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Production Operations
+
+- Updated mail configuration so `MAIL_SCHEME` falls back to `MAIL_ENCRYPTION` for cPanel/Laravel compatibility.
+- Documented the working production SMTP configuration and verification steps for `lifewheel.ranksmedia.com`.
+
 ### Phase 34
 
 - Completed the initial post-deployment review for `https://lifewheel.ranksmedia.com`.
