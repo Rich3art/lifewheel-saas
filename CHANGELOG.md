@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 34
+
+- Completed the initial post-deployment review for `https://lifewheel.ranksmedia.com`.
+- Rechecked production health, login, installer lock, admin route protection, and security headers.
+- Corrected the production Laravel timezone to `Asia/Dubai`.
+- Verified production migrations, public document root contents, writable storage/cache paths, and database backup command readiness.
+- Documented backup/restore procedure, privacy review notes, and operational follow-ups.
+- Recorded SMTP as a follow-up because deployment-time email verification hit a connection error.
+
 ### Phase 33
 
 - Deployed LifeWheel SaaS to `https://lifewheel.ranksmedia.com` on cPanel shared hosting.
