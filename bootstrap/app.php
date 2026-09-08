@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureTwoFactorVerified;
+use App\Http\Middleware\EnsureAdminTwoFactorConfigured;
 use App\Http\Middleware\EnsureFeatureEntitlement;
 use App\Http\Middleware\EnsurePermission;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -35,6 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'csrf' => ValidateCsrfToken::class,
             'guest' => RedirectIfAuthenticated::class,
             'feature' => EnsureFeatureEntitlement::class,
+            'force-admin-2fa' => EnsureAdminTwoFactorConfigured::class,
             'permission' => EnsurePermission::class,
             'signed' => ValidateSignature::class,
             'throttle' => ThrottleRequests::class,

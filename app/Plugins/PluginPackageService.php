@@ -29,6 +29,8 @@ final class PluginPackageService
         'node_modules',
     ];
 
+    private const MAX_UNCOMPRESSED_BYTES = 52428800;
+
     public function __construct(
         private readonly AuditLogger $audit,
     ) {
@@ -134,28 +136,45 @@ final class PluginPackageService
     private function validateZip(ZipArchive $zip): void
     {
         $hasManifest = false;
+        $totalBytes = 0;
 
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $name = (string) $zip->getNameIndex($i);
             $normalized = str_replace('\\', '/', $name);
 
+            if ($normalized === '' || str_contains($normalized, "\0")) {
+                throw new RuntimeException('Plugin ZIP contains an invalid path.');
+            }
+
             if ($normalized === 'plugin.json') {
                 $hasManifest = true;
             }
 
-            if (str_contains($normalized, '../') || str_starts_with($normalized, '/') || preg_match('/^[a-zA-Z]:\//', $normalized)) {
+            if (
+                str_contains($normalized, '../')
+                || str_contains($normalized, '/..')
+                || str_starts_with($normalized, '/')
+                || preg_match('/^[a-zA-Z]:\//', $normalized)
+            ) {
                 throw new RuntimeException('Plugin ZIP contains an unsafe path.');
             }
 
             $segments = array_filter(explode('/', $normalized));
 
             foreach ($segments as $segment) {
-                if (in_array($segment, self::DENIED_SEGMENTS, true)) {
+                if ($segment === '.' || $segment === '..' || in_array($segment, self::DENIED_SEGMENTS, true)) {
                     throw new RuntimeException('Plugin ZIP contains a denied directory or file.');
                 }
             }
 
             if (! str_ends_with($normalized, '/')) {
+                $stat = $zip->statIndex($i);
+                $totalBytes += (int) ($stat['size'] ?? 0);
+
+                if ($totalBytes > self::MAX_UNCOMPRESSED_BYTES) {
+                    throw new RuntimeException('Plugin ZIP uncompressed size exceeds the safety limit.');
+                }
+
                 $extension = strtolower(pathinfo($normalized, PATHINFO_EXTENSION));
 
                 if (! in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
@@ -191,8 +210,10 @@ final class PluginPackageService
         File::ensureDirectoryExists($root);
         $root = realpath($root);
         $parent = realpath(dirname($target)) ?: dirname($target);
+        $normalizedRoot = $root ? rtrim(str_replace('\\', '/', $root), '/') : null;
+        $normalizedParent = rtrim(str_replace('\\', '/', $parent), '/');
 
-        if (! $root || ! str_starts_with($parent, $root)) {
+        if (! $normalizedRoot || ($normalizedParent !== $normalizedRoot && ! str_starts_with($normalizedParent, $normalizedRoot.'/'))) {
             throw new RuntimeException('Plugin target path is outside the configured plugin directory.');
         }
     }

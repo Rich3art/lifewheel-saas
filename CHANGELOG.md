@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Phase 28
+
+- Added protected-admin 2FA enforcement middleware with configurable `FORCE_ADMIN_TWO_FACTOR` support.
+- Added stricter baseline security headers including Content Security Policy, Cross-Origin-Opener-Policy, and cross-domain policy denial.
+- Changed the default session encryption setting to enabled.
+- Hardened plugin ZIP validation against dot-segment entries, null-byte paths, unsafe parent path variants, and excessive uncompressed size.
+- Hardened plugin target path confinement to require exact plugin root containment instead of prefix-only matching.
+- Hardened privacy export downloads so database paths must resolve inside the private export directory.
+- Added security regression tests for protected-admin 2FA, privacy export path confinement, plugin ZIP path rejection, and security headers.
+
 ### Phase 27
 
 - Added privacy consent, policy acceptance, and privacy settings tables with models and seed defaults.

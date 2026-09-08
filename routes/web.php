@@ -96,7 +96,7 @@ Route::prefix('app')
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'verified', 'twofactor', 'permission:admin.dashboard.view'])
+    ->middleware(['auth', 'verified', 'twofactor', 'permission:admin.dashboard.view', 'force-admin-2fa'])
     ->group(function (): void {
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 

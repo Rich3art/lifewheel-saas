@@ -18,8 +18,11 @@ Security is a core platform requirement, not a plugin feature.
 - Sanitized rich text for CMS/blog/forum content.
 - Signed and idempotent payment webhooks.
 - Secure session/cookie configuration.
+- Encrypted session payloads by default.
+- Protected admin roles can be forced to configure TOTP before using admin routes.
 - Production error sanitization.
 - Audit logging for sensitive actions.
+- Baseline security headers include CSP, frame protection, MIME sniffing protection, referrer policy, permissions policy, COOP, and cross-domain policy denial.
 
 ## IDOR / BOLA Rule
 
@@ -48,10 +51,12 @@ Plugin ZIP validation must include:
 - file size limit
 - MIME and extension checks
 - zip-slip prevention
+- dot-segment and null-byte path rejection
+- uncompressed ZIP size ceiling
 - manifest schema validation
 - compatibility checks
 - dependency checks
-- extraction to approved directories only
+- extraction to approved directories only with normalized path confinement
 - audit logging
 
 Third-party PHP plugins execute server-side code. The platform cannot fully sandbox arbitrary PHP plugins on shared hosting.
@@ -63,6 +68,13 @@ Third-party PHP plugins execute server-side code. The platform cannot fully sand
 - User ownership checks happen before retrieval.
 - AI logs must not store provider secrets or raw tokens.
 - Cross-user data must never be included in AI context.
+
+## Private Export Security
+
+- Privacy export files are written under `storage/app/private/privacy_exports`.
+- Downloads are served only through authenticated, owner-checked routes.
+- Export records with paths outside the private export directory are rejected even if the database row belongs to the user.
+- Internal server paths are excluded from generated export payloads.
 
 ## Payment Security
 

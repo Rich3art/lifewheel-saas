@@ -55,10 +55,26 @@ final class PrivacyRequestController extends Controller
         abort_unless($dataExport->status === 'ready', 404);
         abort_if($dataExport->expires_at !== null && $dataExport->expires_at->isPast(), 410);
         abort_unless($dataExport->path && is_file($dataExport->path), 404);
+        abort_unless($this->exportPathIsAllowed($dataExport->path), 404);
 
         return response()->download($dataExport->path, 'lifewheel-data-export-'.$dataExport->id.'.json', [
             'Content-Type' => 'application/json',
         ]);
+    }
+
+    private function exportPathIsAllowed(string $path): bool
+    {
+        $root = realpath(storage_path('app/private/privacy_exports'));
+        $file = realpath($path);
+
+        if (! $root || ! $file) {
+            return false;
+        }
+
+        $root = rtrim(str_replace('\\', '/', $root), '/');
+        $file = str_replace('\\', '/', $file);
+
+        return $file === $root || str_starts_with($file, $root.'/');
     }
 
     public function updateConsent(Request $request, AuditLogger $audit): RedirectResponse
