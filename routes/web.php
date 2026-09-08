@@ -25,6 +25,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstallController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\BillingController as MemberBillingController;
 use App\Http\Controllers\Member\PrivacyRequestController as MemberPrivacyRequestController;
@@ -35,6 +36,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/health', HealthController::class)->name('health');
+Route::get('/install', [InstallController::class, 'show'])->name('install.show');
+Route::post('/install/check', [InstallController::class, 'check'])->name('install.check');
+Route::post('/install', [InstallController::class, 'store'])->name('install.store');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
@@ -189,5 +193,5 @@ Route::prefix('admin')
     });
 
 Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', '^(?!admin|app|login|register|forgot-password|reset-password|email|security|health|blog).*$')
+    ->where('slug', '^(?!admin|app|login|register|forgot-password|reset-password|email|security|health|install|blog).*$')
     ->name('pages.show');

@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 29 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 30 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -61,6 +61,7 @@ Start here:
 - [Phase 27 Complete Privacy Center](docs/PHASE_27_COMPLETE_PRIVACY_CENTER.md)
 - [Phase 28 Security Hardening](docs/PHASE_28_SECURITY_HARDENING.md)
 - [Phase 29 PWA](docs/PHASE_29_PWA.md)
+- [Phase 30 cPanel Installer](docs/PHASE_30_CPANEL_INSTALLER.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -185,3 +186,7 @@ Phase 28 strengthens security headers, encrypted session defaults, protected-adm
 ## Current PWA Foundation
 
 Phase 29 adds installable PWA metadata, app icons, an offline fallback page, a cPanel-compatible service worker, safe-area mobile polish, and PWA asset tests.
+
+## Current cPanel Installer
+
+Phase 30 adds the `/install` browser installer foundation for cPanel-compatible setup with requirement checks, MySQL connection testing, `.env` writing, migrations/seeding, first Super Admin creation, and server-side installer locking.

@@ -69,15 +69,14 @@ No queue worker daemon is assumed. Use synchronous jobs or database-backed jobs 
 
 ## Installer
 
-Future `/install` flow:
+The browser installer foundation is available at `/install` before installation.
 
-- verify PHP version/extensions
-- verify writable directories
-- collect database credentials
-- collect site settings
-- create initial Super Admin
-- run migrations
-- seed core defaults
-- lock installer after completion
+It verifies PHP version/extensions, writable directories, `.env` writability, and MySQL/MariaDB connectivity. It collects database credentials, site settings, timezone, and the first Super Admin account.
+
+On successful install it writes production `.env` values, runs migrations and seeders, creates or updates the Super Admin user, assigns the protected `super-admin` role, writes `storage/app/installed.lock`, and redirects to login.
+
+The installer is locked when `APP_INSTALLED=true`, the lock file exists, or the configured database already has users. Existing database users intentionally close the installer even if the lock file is missing.
+
+Pre-install defaults use file sessions and file cache so the installer can render before database tables exist. The installer switches production installs to database-backed sessions and cache after database setup.
 
 Never commit production credentials.

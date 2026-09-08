@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 30
+
+- Added a public pre-install `/install` browser installer with cPanel-oriented server requirement checks.
+- Added MySQL/MariaDB connection testing without exposing database passwords in old input.
+- Added installer services for installation locking, environment writing, requirement checks, migrations/seeding, and first Super Admin creation.
+- Locked the installer through `APP_INSTALLED`, `storage/app/installed.lock`, and existing users in the configured database.
+- Changed pre-install defaults to file-backed sessions and cache so the installer can render before database tables exist.
+- Added Phase 30 installer documentation and focused route/requirement tests.
+
 ### Phase 29
 
 - Added installable PWA manifest with standalone display, app identity, icons, shortcuts, theme color, and app scope.
