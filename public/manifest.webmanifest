@@ -1,0 +1,42 @@
+{
+  "name": "LifeWheel SaaS",
+  "short_name": "LifeWheel",
+  "description": "A modular LifeWheel operating system for goals, habits, reviews, AI coaching, and private personal growth records.",
+  "id": "/",
+  "start_url": "/app/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "health", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/app/dashboard",
+      "description": "Open your LifeWheel dashboard."
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "url": "/app/settings",
+      "description": "Open your account settings."
+    }
+  ]
+}

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Phase 29
+
+- Added installable PWA manifest with standalone display, app identity, icons, shortcuts, theme color, and app scope.
+- Added static SVG app icons and maskable icon for cPanel-compatible release packaging.
+- Added offline fallback page and service worker with app-shell caching, navigation fallback, and build/icon asset caching.
+- Added layout metadata for manifest, theme color, mobile web app capability, Apple web app capability, and icons.
+- Added progressive service worker registration in the compiled app bundle.
+- Added mobile safe-area and tap-highlight polish.
+- Added PWA feature tests for metadata, manifest, service worker, and offline page availability.
+
 ### Phase 28
 
 - Added protected-admin 2FA enforcement middleware with configurable `FORCE_ADMIN_TWO_FACTOR` support.
