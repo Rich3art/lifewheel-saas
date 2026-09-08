@@ -57,6 +57,14 @@ Release ZIPs should include:
 
 The end user should not need to run Composer or npm manually for normal installation.
 
+Release packaging is handled by:
+
+```bash
+php scripts/release/package.php --version=1.0.0
+```
+
+The packager creates a Core ZIP plus independent first-party plugin ZIPs under `build/releases/{version}`. A manual GitHub Actions workflow can build frontend assets, install production Composer dependencies, and upload release artifacts.
+
 ## Cron
 
 Use cPanel cron to call Laravel scheduler:

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Phase 31
+
+- Added a standalone PHP release packager for cPanel-compatible Core and first-party plugin ZIP artifacts.
+- Added plugin manifest validation during packaging.
+- Added deterministic release manifest output for Core and plugin artifacts.
+- Added a manual GitHub Actions workflow for installing dependencies, building assets, validating the packager, and uploading release ZIPs.
+- Documented the release/update model, artifact boundaries, exclusions, and remaining clean-install QA work.
+
 ### Phase 30
 
 - Added a public pre-install `/install` browser installer with cPanel-oriented server requirement checks.
