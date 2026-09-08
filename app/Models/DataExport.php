@@ -14,11 +14,12 @@ final class DataExport extends Model
         'format',
         'path',
         'expires_at',
+        'completed_at',
     ];
 
     protected function casts(): array
     {
-        return ['expires_at' => 'datetime'];
+        return ['expires_at' => 'datetime', 'completed_at' => 'datetime'];
     }
 
     public function user(): BelongsTo

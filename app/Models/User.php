@@ -112,4 +112,14 @@ final class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(DataExport::class);
     }
+
+    public function privacyConsents(): HasMany
+    {
+        return $this->hasMany(PrivacyConsent::class);
+    }
+
+    public function policyAcceptances(): HasMany
+    {
+        return $this->hasMany(PolicyAcceptance::class);
+    }
 }

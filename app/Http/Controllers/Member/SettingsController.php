@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\Page;
+use App\Models\PolicyAcceptance;
+use App\Models\PrivacyConsent;
 use App\Models\PrivacyRequest;
 use App\Services\MemberSettingsRegistry;
 use Illuminate\Http\Request;
@@ -18,10 +21,25 @@ final class SettingsController extends Controller
             'user' => $user,
             'sections' => $settings->visibleSections(),
             'privacyRequests' => PrivacyRequest::query()
+                ->with('dataExports')
                 ->whereBelongsTo($user)
                 ->latest()
                 ->limit(10)
                 ->get(),
+            'privacyConsents' => PrivacyConsent::query()
+                ->whereBelongsTo($user)
+                ->get()
+                ->keyBy('key'),
+            'legalPages' => Page::query()
+                ->with('currentVersion')
+                ->where('is_legal', true)
+                ->where('status', 'published')
+                ->orderBy('title')
+                ->get(),
+            'policyAcceptances' => PolicyAcceptance::query()
+                ->whereBelongsTo($user)
+                ->pluck('page_version_id')
+                ->all(),
         ]);
     }
 }

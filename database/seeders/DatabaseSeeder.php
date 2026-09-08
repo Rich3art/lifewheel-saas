@@ -12,6 +12,7 @@ final class DatabaseSeeder extends Seeder
         $this->call(SaasSeeder::class);
         $this->call(CmsSeeder::class);
         $this->call(MemberSettingsSeeder::class);
+        $this->call(PrivacySeeder::class);
         $this->call(AiSeeder::class);
         $this->call(BillingSeeder::class);
     }

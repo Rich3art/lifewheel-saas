@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\DataExport;
 use App\Models\MemberSettingsSection;
 use App\Models\Permission;
 use App\Models\PrivacyRequest;
@@ -58,5 +59,56 @@ final class MemberSettingsPrivacyAdminTest extends TestCase
 
         $this->assertSame('processing', $privacyRequest->status);
         $this->assertSame($admin->id, $privacyRequest->processed_by);
+    }
+
+    public function test_admin_processing_data_export_generates_ready_export(): void
+    {
+        $admin = $this->privacyAdmin();
+        $member = User::factory()->create();
+        $privacyRequest = PrivacyRequest::query()->create(['user_id' => $member->id, 'type' => 'data_export']);
+        $export = DataExport::query()->create([
+            'user_id' => $member->id,
+            'privacy_request_id' => $privacyRequest->id,
+            'status' => 'pending',
+            'format' => 'json',
+        ]);
+
+        $this->actingAs($admin)->put("/admin/privacy-requests/{$privacyRequest->id}", [
+            'status' => 'processing',
+        ])->assertRedirect();
+
+        $export->refresh();
+
+        $this->assertSame('ready', $export->status);
+        $this->assertNotNull($export->path);
+    }
+
+    public function test_admin_must_confirm_erasure_before_completion(): void
+    {
+        $admin = $this->privacyAdmin();
+        $member = User::factory()->create(['email' => 'erase-me@example.test']);
+        $privacyRequest = PrivacyRequest::query()->create(['user_id' => $member->id, 'type' => 'erasure']);
+
+        $this->actingAs($admin)->put("/admin/privacy-requests/{$privacyRequest->id}", [
+            'status' => 'completed',
+        ])->assertStatus(422);
+
+        $this->actingAs($admin)->put("/admin/privacy-requests/{$privacyRequest->id}", [
+            'status' => 'completed',
+            'confirm_erasure' => 1,
+        ])->assertRedirect();
+
+        $this->assertSame('erased-user-'.$member->id.'@example.invalid', $member->fresh()->email);
+    }
+
+    private function privacyAdmin(): User
+    {
+        $admin = User::factory()->create();
+
+        foreach (['admin.dashboard.view', 'admin.privacy.manage'] as $slug) {
+            $admin->directPermissions()->attach(Permission::factory()->create(['slug' => $slug]));
+        }
+
+        return $admin;
     }
 }

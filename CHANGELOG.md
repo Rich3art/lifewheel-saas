@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Phase 27
+
+- Added privacy consent, policy acceptance, and privacy settings tables with models and seed defaults.
+- Added protected JSON data export generation to private storage for Core and known plugin-owned user tables.
+- Added member export download route with ownership, status, expiry, and file existence checks.
+- Added member consent preference updates for product updates and optional research/feedback contact.
+- Added legal policy acceptance records tied to immutable `page_versions`.
+- Added request due dates, user identity confirmation metadata, admin queue metrics, and resolution summaries.
+- Added admin processing support for data export generation and confirmed erasure/anonymization workflows.
+- Updated member Privacy Center and Super Admin privacy queue UI.
+- Added tests for ready exports, export ownership, consent updates, policy acceptance, admin export processing, and erasure confirmation.
+
 ### Phase 26
 
 - Added real Super Admin billing metrics for total subscriptions, active subscriptions, past-due subscriptions, MRR, and annual run rate.

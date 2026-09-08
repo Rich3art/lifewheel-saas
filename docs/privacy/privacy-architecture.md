@@ -33,6 +33,8 @@ Exports must exclude:
 
 Downloads must be authenticated, authorization-checked, and expire.
 
+Current implementation generates protected JSON files under non-public storage and returns them only through an authenticated owner-checked controller route.
+
 ## Data Deletion
 
 Deletion is a workflow, not an immediate unsafe cascade:
@@ -48,6 +50,8 @@ Deletion is a workflow, not an immediate unsafe cascade:
 
 Retention exceptions may include financial records, fraud/security records, backups, and legal obligations.
 
+Current implementation requires an explicit admin confirmation before erasure completion and anonymizes the account identity while retaining records that may be needed for legal, billing, security, or audit reasons.
+
 ## Legal Content Versioning
 
 Terms and Privacy Policy require versioned publication:
@@ -59,6 +63,8 @@ Terms and Privacy Policy require versioned publication:
 - user acceptance timestamp where acceptance is required
 
 Do not overwrite legally significant historical versions.
+
+Current implementation stores policy acceptance against a specific `page_versions` row, preserving which policy snapshot the member accepted.
 
 ## Admin Access To Private Content
 

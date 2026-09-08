@@ -89,6 +89,9 @@ Route::prefix('app')
         Route::get('/billing', [MemberBillingController::class, 'index'])->name('billing.index');
         Route::post('/billing/checkout', [MemberBillingController::class, 'checkout'])->name('billing.checkout');
         Route::post('/privacy-requests', [MemberPrivacyRequestController::class, 'store'])->name('privacy-requests.store');
+        Route::get('/privacy-exports/{dataExport}', [MemberPrivacyRequestController::class, 'download'])->name('privacy-exports.download');
+        Route::put('/privacy-consents', [MemberPrivacyRequestController::class, 'updateConsent'])->name('privacy-consents.update');
+        Route::post('/policies/{page}/accept', [MemberPrivacyRequestController::class, 'acceptPolicy'])->name('policies.accept');
     });
 
 Route::prefix('admin')
