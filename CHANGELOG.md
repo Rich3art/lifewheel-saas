@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Phase 32
+
+- Added a Phase 32 release-readiness QA script that validates installer, release workflow, packaging exclusions, and plugin manifest/entry integrity without Laravel bootstrapping.
+- Added a cPanel clean-install and upgrade QA checklist for artifact validation, installer flow, authorization, plugin lifecycle, IDOR/BOLA, privacy, payments, and PWA checks.
+- Updated project documentation to mark Phase 32 as the active baseline.
+
 ### Phase 31
 
 - Added a standalone PHP release packager for cPanel-compatible Core and first-party plugin ZIP artifacts.
