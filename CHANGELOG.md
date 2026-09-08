@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Phase 33
+
+- Deployed LifeWheel SaaS to `https://lifewheel.ranksmedia.com` on cPanel shared hosting.
+- Configured the Laravel document root to the production `public` directory.
+- Created the production MySQL database/user and `info@lifewheel.ranksmedia.com` mailbox.
+- Ran production dependency installation, migrations, seeders, installer locking, and health checks.
+- Fixed Super Admin installer bootstrap so `email_verified_at` can be persisted by the `User` model.
+- Verified production debug mode is off, `/install` is locked, `/login` is live, `/health` is OK, admin routes require authentication, and Super Admin admin access requires 2FA setup.
+
 ### Phase 32
 
 - Added a Phase 32 release-readiness QA script that validates installer, release workflow, packaging exclusions, and plugin manifest/entry integrity without Laravel bootstrapping.

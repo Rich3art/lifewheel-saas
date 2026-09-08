@@ -4,7 +4,7 @@ Commercial, modular, AI-capable LifeWheel SaaS platform designed for ordinary cP
 
 ## Current Status
 
-Phase 32 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
+Phase 33 is the active baseline. The project has been redirected from an earlier Next.js prototype toward the approved target architecture:
 
 - Laravel 12
 - PHP 8.2+
@@ -64,6 +64,7 @@ Start here:
 - [Phase 30 cPanel Installer](docs/PHASE_30_CPANEL_INSTALLER.md)
 - [Phase 31 Release Update System](docs/PHASE_31_RELEASE_UPDATE_SYSTEM.md)
 - [Phase 32 Clean Install Upgrade QA](docs/PHASE_32_CLEAN_INSTALL_UPGRADE_QA.md)
+- [Phase 33 Production Deployment](docs/PHASE_33_PRODUCTION_DEPLOYMENT.md)
 - [Plugin Architecture](docs/plugins/plugin-architecture.md)
 - [Security Model](docs/security/security-model.md)
 - [cPanel Deployment Architecture](docs/deployment/cpanel-architecture.md)
@@ -200,3 +201,7 @@ Phase 31 adds a cPanel-oriented release packager, independent first-party plugin
 ## Current Clean Install And Upgrade QA
 
 Phase 32 adds a release-readiness QA script and a cPanel clean-install/upgrade checklist covering artifact contents, installer locking, Super Admin access, authorization, plugin lifecycle, feature denial paths, IDOR/BOLA checks, privacy, payments, and PWA smoke checks.
+
+## Current Production Deployment
+
+Phase 33 deploys the platform to `https://lifewheel.ranksmedia.com` on cPanel shared hosting, locks the installer, verifies production mode, confirms HTTPS/security headers, and confirms Super Admin login is protected by forced 2FA setup.
