@@ -111,6 +111,7 @@
                                 <span class="text-zinc-500">{{ $area['group'] }}</span>
                             </span>
                             <input name="scores[{{ $area['key'] }}]" type="number" min="1" max="10" required value="{{ old('scores.'.$area['key'], $scores[$area['key']]->score ?? 5) }}" class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
+                            <textarea name="notes[{{ $area['key'] }}]" rows="3" placeholder="Optional: what influenced this score?" class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">{{ old('notes.'.$area['key']) }}</textarea>
                         </label>
                     @endforeach
                 </div>
@@ -118,6 +119,21 @@
                 <button class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950">Save assessment</button>
             </form>
         </section>
+
+        @if ($latestReport)
+            <section class="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-6">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-emerald-200">Saved AI Coach report</p>
+                        <h2 class="mt-1 text-lg font-semibold">Latest LifeWheel feedback</h2>
+                    </div>
+                    @if ($latest)
+                        <a href="{{ route('plugins.lifewheel.history.show', $latest->id) }}" class="rounded-xl border border-emerald-200/20 px-4 py-2 text-sm text-emerald-50">Open full report</a>
+                    @endif
+                </div>
+                <p class="mt-4 text-sm leading-6 text-emerald-50/90">{{ $latestReport['summary'] ?? '' }}</p>
+            </section>
+        @endif
 
         <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h2 class="text-lg font-semibold">History</h2>

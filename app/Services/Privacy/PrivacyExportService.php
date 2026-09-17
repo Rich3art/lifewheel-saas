@@ -24,7 +24,7 @@ final class PrivacyExportService
             'billing_invoices' => 'user_id',
             'ai_usage_events' => 'user_id',
         ],
-        'lifewheel' => ['lifewheel_assessments' => 'user_id', 'lifewheel_scores' => 'user_id'],
+        'lifewheel' => ['lifewheel_assessments' => 'user_id', 'lifewheel_scores' => 'user_id', 'lifewheel_coaching_reports' => 'user_id'],
         'journal' => ['journal_entries' => 'user_id'],
         'goals' => ['goals' => 'user_id', 'goal_milestones' => 'user_id', 'goal_progress_records' => 'user_id'],
         'habits' => ['habits' => 'user_id', 'habit_logs' => 'user_id'],
