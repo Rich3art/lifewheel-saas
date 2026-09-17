@@ -111,7 +111,10 @@
                                 <span class="text-zinc-500">{{ $area['group'] }}</span>
                             </span>
                             <input name="scores[{{ $area['key'] }}]" type="number" min="1" max="10" required value="{{ old('scores.'.$area['key'], $scores[$area['key']]->score ?? 5) }}" class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                            <textarea name="notes[{{ $area['key'] }}]" rows="3" placeholder="Optional: what influenced this score?" class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">{{ old('notes.'.$area['key']) }}</textarea>
+                            <textarea name="notes[{{ $area['key'] }}]" rows="3" required minlength="3" placeholder="Required: what influenced this score?" class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">{{ old('notes.'.$area['key']) }}</textarea>
+                            @error('notes.'.$area['key'])
+                                <span class="mt-2 block text-xs text-red-300">{{ $message }}</span>
+                            @enderror
                         </label>
                     @endforeach
                 </div>
@@ -124,8 +127,8 @@
             <section class="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-6">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <p class="text-sm text-emerald-200">Saved AI Coach report</p>
-                        <h2 class="mt-1 text-lg font-semibold">Latest LifeWheel feedback</h2>
+                        <p class="text-sm text-emerald-200">Saved with your LifeWheel</p>
+                        <h2 class="mt-1 text-lg font-semibold">AI Coach Feedback</h2>
                     </div>
                     @if ($latest)
                         <a href="{{ route('plugins.lifewheel.history.show', $latest->id) }}" class="rounded-xl border border-emerald-200/20 px-4 py-2 text-sm text-emerald-50">Open full report</a>

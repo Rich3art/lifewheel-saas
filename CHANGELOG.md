@@ -9,6 +9,7 @@
 - Fixed audit logging for string-key plugin records so plugin activation can log subjects such as `lifewheel`.
 - Replaced foundation placeholder copy with real LifeWheel dashboard entry points and updated default LifeWheel categories to the 11 LifeOS areas.
 - Added optional per-category LifeWheel notes and saved per-submission coaching reports with past/current/future feedback for every category.
+- Made LifeWheel category notes mandatory and simplified saved output into one AI Coach Feedback section.
 
 ### Phase 34
 

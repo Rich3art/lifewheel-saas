@@ -39,12 +39,12 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
             $rules = [
                 'reflection' => ['nullable', 'string', 'max:5000'],
                 'scores' => ['required', 'array'],
-                'notes' => ['nullable', 'array'],
+                'notes' => ['required', 'array'],
             ];
 
             foreach (LifeWheelAreas::keys() as $key) {
                 $rules["scores.{$key}"] = ['required', 'integer', 'min:1', 'max:10'];
-                $rules["notes.{$key}"] = ['nullable', 'string', 'max:2000'];
+                $rules["notes.{$key}"] = ['required', 'string', 'min:3', 'max:2000'];
             }
 
             $attributes = $request->validate($rules);
@@ -188,7 +188,6 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
     function buildLifeWheelCoachingReport(array $areas, int $assessmentId, float $currentOverall, ?float $previousOverall, \Illuminate\Support\Collection $scores, \Illuminate\Support\Collection $previousScores, ?string $reflection): array
     {
         $overallDelta = $previousOverall === null ? null : round($currentOverall - $previousOverall, 1);
-        $missingNotes = [];
         $categoryFeedback = [];
 
         foreach ($areas as $area) {
@@ -198,10 +197,6 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
             $previousScore = $previous ? (int) $previous->score : null;
             $previousNote = $previous ? trim((string) ($previous->note ?? '')) : '';
             $delta = $previousScore === null ? null : $score - $previousScore;
-
-            if ($note === '') {
-                $missingNotes[] = $area['name'];
-            }
 
             $categoryFeedback[] = [
                 'area_key' => $area['key'],
@@ -213,7 +208,6 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
                 'note' => $note,
                 'previous_note' => $previousNote,
                 'feedback' => lifeWheelCategoryFeedback($area['name'], $score, $previousScore, $delta, $note, $previousNote),
-                'next_step' => lifeWheelCategoryNextStep($area['name'], $score, $delta, $note),
             ];
         }
 
@@ -222,8 +216,7 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
             'overall_score' => round($currentOverall, 1),
             'previous_overall_score' => $previousOverall !== null ? round($previousOverall, 1) : null,
             'overall_change' => $overallDelta,
-            'summary' => lifeWheelOverallFeedback($currentOverall, $previousOverall, $overallDelta, $reflection, $missingNotes),
-            'missing_notes' => $missingNotes,
+            'summary' => lifeWheelOverallFeedback($currentOverall, $previousOverall, $overallDelta, $reflection),
             'category_feedback' => $categoryFeedback,
             'created_at' => now()->toIso8601String(),
         ];
@@ -231,24 +224,20 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
 }
 
 if (! function_exists('lifeWheelOverallFeedback')) {
-    function lifeWheelOverallFeedback(float $currentOverall, ?float $previousOverall, ?float $overallDelta, ?string $reflection, array $missingNotes): string
+    function lifeWheelOverallFeedback(float $currentOverall, ?float $previousOverall, ?float $overallDelta, ?string $reflection): string
     {
         if ($previousOverall === null) {
-            $message = 'This is your baseline Life Wheel. The power is not in judging the number; it is in giving your future self something honest to compare against.';
+            $message = 'This is your baseline Life Wheel. The score is not a judgment; it is the first honest snapshot your future reports will compare against.';
         } elseif ($overallDelta > 0) {
-            $message = 'You moved from '.number_format($previousOverall, 1).' to '.number_format($currentOverall, 1).'. That is real forward motion. Keep noticing the specific choices that created the lift.';
+            $message = 'Your overall Life Score moved from '.number_format($previousOverall, 1).' to '.number_format($currentOverall, 1).'. That is forward movement worth noticing, especially because your category notes now show what was happening behind the numbers.';
         } elseif ($overallDelta < 0) {
-            $message = 'You moved from '.number_format($previousOverall, 1).' to '.number_format($currentOverall, 1).'. That dip is information, not failure. Use it to protect energy, reset priorities, and choose one practical next step.';
+            $message = 'Your overall Life Score moved from '.number_format($previousOverall, 1).' to '.number_format($currentOverall, 1).'. Treat that as useful information, not failure; the notes you added are what make the next step clearer.';
         } else {
-            $message = 'Your overall score stayed steady at '.number_format($currentOverall, 1).'. Stability can be useful; now look for one area where a small deliberate action can create momentum.';
+            $message = 'Your overall Life Score stayed at '.number_format($currentOverall, 1).'. Stability can still be progress when you understand what is keeping things steady.';
         }
 
         if (trim((string) $reflection) !== '') {
-            $message .= ' Your reflection gives the report more context, so keep writing even if it is short.';
-        }
-
-        if ($missingNotes !== []) {
-            $message .= ' Next time, try adding a sentence for each category. Missing category notes make the coaching less personal for: '.implode(', ', $missingNotes).'.';
+            $message .= ' Your overall reflection adds helpful context across the whole wheel.';
         }
 
         return $message;
@@ -258,47 +247,26 @@ if (! function_exists('lifeWheelOverallFeedback')) {
 if (! function_exists('lifeWheelCategoryFeedback')) {
     function lifeWheelCategoryFeedback(string $areaName, int $score, ?int $previousScore, ?int $delta, string $note, string $previousNote): string
     {
-        if ($previousScore === null) {
-            $message = $areaName.' starts at '.$score.'/10. This is your starting line, not your identity. The next wheel will show what changed.';
-        } elseif ($delta > 0) {
-            $message = $areaName.' improved from '.$previousScore.' to '.$score.'. Well done. That kind of lift usually comes from repeated choices, even small ones.';
-        } elseif ($delta < 0) {
-            $message = $areaName.' moved from '.$previousScore.' to '.$score.'. Be kind with yourself here. A lower score is a signal to support this area more intentionally, not a reason to feel defeated.';
-        } else {
-            $message = $areaName.' stayed at '.$score.'. Consistency gives you a stable base; now choose one small action that could move it by one point.';
-        }
+        $context = lifeWheelNotePreview($note);
+        $previousContext = lifeWheelNotePreview($previousNote);
 
-        if ($note !== '' && $previousNote !== '') {
-            $message .= ' Your current note adds useful context compared with last time, which makes the pattern more personal and easier to act on.';
-        } elseif ($note !== '') {
-            $message .= ' Good job adding context. This note will make the next comparison much more useful.';
+        if ($previousScore === null) {
+            $message = $areaName.' is starting at '.$score.'/10, with your own context being: '.$context.'. This gives the next Life Wheel something personal to compare against.';
+        } elseif ($delta > 0) {
+            $message = $areaName.' rose from '.$previousScore.' to '.$score.'. Compared with last time'.($previousContext ? ', when you wrote '.$previousContext : '').', your current note shows a different season: '.$context.'. That is encouraging movement, and it is worth protecting what helped.';
+        } elseif ($delta < 0) {
+            $message = $areaName.' moved from '.$previousScore.' to '.$score.'. Your note says '.$context.', so the lower score should be treated as a signal for care and adjustment, not as something to be ashamed of.';
         } else {
-            $message .= ' Add a short note next time so your future report can understand what was happening behind the number.';
+            $message = $areaName.' stayed at '.$score.', but the story still matters. Your note says '.$context.'. Use that detail to decide whether this area needs maintenance, patience, or a small push.';
         }
 
         return $message;
     }
 }
 
-if (! function_exists('lifeWheelCategoryNextStep')) {
-    function lifeWheelCategoryNextStep(string $areaName, int $score, ?int $delta, string $note): string
+if (! function_exists('lifeWheelNotePreview')) {
+    function lifeWheelNotePreview(string $note): string
     {
-        if ($note === '') {
-            return 'Next time, write one sentence about what influenced your '.$areaName.' score.';
-        }
-
-        if ($score <= 4) {
-            return 'Pick one gentle action you can repeat twice this week to support '.$areaName.'.';
-        }
-
-        if ($delta !== null && $delta < 0) {
-            return 'Choose one stabilizing action this week and remove one pressure point where possible.';
-        }
-
-        if ($score >= 8) {
-            return 'Protect what is working and write down the habit or condition that helped this score stay strong.';
-        }
-
-        return 'Choose one measurable next step that could raise '.$areaName.' by one point before your next Life Wheel.';
+        return trim(mb_substr(preg_replace('/\s+/', ' ', $note), 0, 220));
     }
 }
