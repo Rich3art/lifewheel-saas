@@ -7,6 +7,7 @@
 - Updated mail configuration so `MAIL_SCHEME` falls back to `MAIL_ENCRYPTION` for cPanel/Laravel compatibility.
 - Documented the working production SMTP configuration and verification steps for `lifewheel.ranksmedia.com`.
 - Fixed audit logging for string-key plugin records so plugin activation can log subjects such as `lifewheel`.
+- Replaced foundation placeholder copy with real LifeWheel dashboard entry points and updated default LifeWheel categories to the 11 LifeOS areas.
 
 ### Phase 34
 

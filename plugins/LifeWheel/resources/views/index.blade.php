@@ -21,9 +21,18 @@
         <div class="flex flex-col gap-4 border-b border-white/10 pb-8 lg:flex-row lg:items-center lg:justify-between">
             <div>
                 <p class="text-sm text-zinc-400">Personal operating system</p>
-                <h1 class="mt-2 text-3xl font-semibold tracking-tight">LifeWheel</h1>
+                <h1 class="mt-2 text-3xl font-semibold tracking-tight">{{ $latest ? 'Update your Life Wheel' : 'Create your first Life Wheel' }}</h1>
+                <p class="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">Rate each area from 1 to 10. Every saved wheel is kept in your history so AI can compare your past and present scores, reflections, and patterns.</p>
             </div>
-            <a href="{{ route('member.dashboard') }}" class="rounded-xl border border-white/10 px-4 py-2 text-center text-sm text-zinc-200">Dashboard</a>
+            <div class="flex flex-col gap-2 sm:flex-row">
+                @if (\Illuminate\Support\Facades\Route::has('plugins.ai-life-analysis.index'))
+                    <a href="{{ route('plugins.ai-life-analysis.index') }}" class="rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-center text-sm text-emerald-100">AI Analysis</a>
+                @endif
+                @if (\Illuminate\Support\Facades\Route::has('plugins.ai-coach.index'))
+                    <a href="{{ route('plugins.ai-coach.index') }}" class="rounded-xl border border-white/10 px-4 py-2 text-center text-sm text-zinc-200">AI Coach</a>
+                @endif
+                <a href="{{ route('member.dashboard') }}" class="rounded-xl border border-white/10 px-4 py-2 text-center text-sm text-zinc-200">Dashboard</a>
+            </div>
         </div>
 
         @if (session('status') === 'lifewheel-assessment-created')
@@ -59,9 +68,9 @@
                         <div class="mt-2 text-6xl font-semibold">{{ $latest ? number_format((float) $latest->overall_score, 1) : '0.0' }}</div>
                         <p class="mt-4 text-sm text-zinc-400">
                             @if ($latest)
-                                Last updated {{ \Illuminate\Support\Carbon::parse($latest->created_at)->format('Y-m-d H:i') }}.
+                        Last updated {{ \Illuminate\Support\Carbon::parse($latest->created_at)->format('Y-m-d H:i') }}.
                             @else
-                                Complete your first assessment to create your baseline.
+                                Complete your first assessment to create your baseline, like the wheel in your notebook.
                             @endif
                         </p>
                     </div>
@@ -90,7 +99,8 @@
         </div>
 
         <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <h2 class="text-lg font-semibold">Update LifeWheel</h2>
+            <h2 class="text-lg font-semibold">{{ $latest ? 'Update LifeWheel' : 'Create LifeWheel' }}</h2>
+            <p class="mt-2 text-sm text-zinc-400">Use your honest score for today. A 4 today becoming a 6 later is exactly the kind of progress the AI can encourage and explain.</p>
             <form method="POST" action="{{ route('plugins.lifewheel.assessments.store') }}" class="mt-6 space-y-6">
                 @csrf
                 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -104,7 +114,7 @@
                         </label>
                     @endforeach
                 </div>
-                <textarea name="reflection" rows="4" placeholder="What changed since your last check-in?" class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">{{ old('reflection') }}</textarea>
+                <textarea name="reflection" rows="4" placeholder="Share anything else that matters today. What changed? What feels heavy? What are you proud of?" class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">{{ old('reflection') }}</textarea>
                 <button class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-zinc-950">Save assessment</button>
             </form>
         </section>
@@ -112,12 +122,14 @@
         <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h2 class="text-lg font-semibold">History</h2>
             <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                @foreach ($history as $item)
+                @forelse ($history as $item)
                     <a href="{{ route('plugins.lifewheel.history.show', $item->id) }}" class="rounded-xl border border-white/10 px-4 py-3 text-sm transition hover:bg-white/[0.06]">
                         <span class="block font-semibold">{{ number_format((float) $item->overall_score, 1) }}/10</span>
                         <span class="mt-1 block text-zinc-500">{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('Y-m-d H:i') }}</span>
                     </a>
-                @endforeach
+                @empty
+                    <p class="text-sm text-zinc-400">No saved wheels yet. Save your first one above.</p>
+                @endforelse
             </div>
         </section>
     </main>

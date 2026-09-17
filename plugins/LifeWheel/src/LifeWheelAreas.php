@@ -7,15 +7,17 @@ final class LifeWheelAreas
     public static function all(): array
     {
         return [
-            ['key' => 'body', 'name' => 'Body', 'group' => 'Health'],
-            ['key' => 'mind', 'name' => 'Mind', 'group' => 'Health'],
-            ['key' => 'soul', 'name' => 'Soul', 'group' => 'Health'],
-            ['key' => 'romance', 'name' => 'Romance', 'group' => 'Relationships'],
-            ['key' => 'family', 'name' => 'Family', 'group' => 'Relationships'],
-            ['key' => 'friends', 'name' => 'Friends', 'group' => 'Relationships'],
-            ['key' => 'mission', 'name' => 'Mission', 'group' => 'Work'],
-            ['key' => 'money', 'name' => 'Money', 'group' => 'Work'],
-            ['key' => 'growth', 'name' => 'Growth', 'group' => 'Work'],
+            ['key' => 'physical_health', 'name' => 'Physical Health', 'group' => 'Health'],
+            ['key' => 'mental_wellness', 'name' => 'Mental Wellness', 'group' => 'Health'],
+            ['key' => 'faith_purpose', 'name' => 'Faith & Purpose', 'group' => 'Purpose'],
+            ['key' => 'marriage_relationships', 'name' => 'Marriage / Relationships', 'group' => 'Relationships'],
+            ['key' => 'family_friends', 'name' => 'Family & Friends', 'group' => 'Relationships'],
+            ['key' => 'career', 'name' => 'Career', 'group' => 'Work'],
+            ['key' => 'business', 'name' => 'Business', 'group' => 'Work'],
+            ['key' => 'money_finance', 'name' => 'Money & Finance', 'group' => 'Money'],
+            ['key' => 'learning', 'name' => 'Learning', 'group' => 'Growth'],
+            ['key' => 'personal_growth', 'name' => 'Personal Growth', 'group' => 'Growth'],
+            ['key' => 'lifestyle', 'name' => 'Lifestyle', 'group' => 'Life'],
         ];
     }
 

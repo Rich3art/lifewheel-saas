@@ -11,16 +11,20 @@
 
         <section class="grid flex-1 items-center gap-8 py-16 lg:grid-cols-[1.1fr_.9fr]">
             <div>
-                <p class="text-sm uppercase tracking-[0.18em] text-zinc-400">Commercial cPanel SaaS</p>
-                <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-tight md:text-6xl">A modular LifeWheel platform with a stable core and installable plugins.</h1>
-                <p class="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">Phase 1 establishes the Laravel foundation only: routing, shells, environment, assets, health checks, and cPanel-compatible structure.</p>
+                <p class="text-sm uppercase tracking-[0.18em] text-emerald-300">Personal operating system</p>
+                <h1 class="mt-5 max-w-3xl text-5xl font-semibold tracking-tight md:text-6xl">Create your Life Wheel, track your history, and get AI coaching from your own data.</h1>
+                <p class="mt-6 max-w-2xl text-lg leading-8 text-zinc-300">Score the core areas of your life from 1 to 10, save each check-in, compare progress over time, and use AI to understand where you have come from, where you are, and where to focus next.</p>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a href="{{ route('member.dashboard') }}" class="rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-zinc-950">Open my dashboard</a>
+                    <a href="{{ route('login') }}" class="rounded-xl border border-white/10 px-5 py-3 text-center text-sm text-zinc-200">Sign in</a>
+                </div>
             </div>
             <div class="rounded-xl border border-white/10 bg-white/5 p-6">
-                <h2 class="text-xl font-semibold">Foundation boundaries</h2>
+                <h2 class="text-xl font-semibold">How it works</h2>
                 <ul class="mt-5 space-y-3 text-sm text-zinc-300">
-                    <li>Core platform infrastructure belongs in Laravel core.</li>
-                    <li>LifeWheel, AI Coach, Forum, Gamification, and payment providers will be plugins.</li>
-                    <li>No permanent Node process is required in production.</li>
+                    <li>1. Rate each Life Wheel category from 1 to 10.</li>
+                    <li>2. Save every wheel so your history is never overwritten.</li>
+                    <li>3. Use AI Analysis and AI Coach for personalized feedback from past and present wheels.</li>
                 </ul>
             </div>
         </section>
