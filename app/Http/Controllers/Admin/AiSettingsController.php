@@ -15,9 +15,23 @@ final class AiSettingsController extends Controller
 {
     public function index(): View
     {
+        $providers = AiProvider::query()->orderBy('name')->get();
+        $routes = AiModelRoute::query()->with('provider')->orderBy('feature_slug')->orderBy('sort_order')->get();
+        $openAiProvider = $providers->firstWhere('key', 'openai');
+        $coachRoute = $routes->firstWhere('feature_slug', 'ai.coach');
+
         return view('admin.ai.index', [
-            'providers' => AiProvider::query()->orderBy('name')->get(),
-            'routes' => AiModelRoute::query()->with('provider')->orderBy('feature_slug')->orderBy('sort_order')->get(),
+            'providers' => $providers,
+            'routes' => $routes,
+            'openAiProvider' => $openAiProvider,
+            'coachRoute' => $coachRoute,
+            'lifeWheelAiReady' => (bool) (
+                $openAiProvider?->enabled
+                && ! $openAiProvider?->mock_mode
+                && $openAiProvider?->encrypted_api_key
+                && $coachRoute?->enabled
+                && $coachRoute?->provider?->key === 'openai'
+            ),
             'lifeWheelPrompt' => AiPromptSetting::query()
                 ->where('key', 'lifewheel.feedback.system_prompt')
                 ->first(),
