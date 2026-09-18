@@ -18,7 +18,13 @@
                 @if (($report['_meta']['provider_key'] ?? null) === 'openai')
                     <p class="mt-2 text-xs text-emerald-100/80">Generated with OpenAI via {{ $report['_meta']['model'] ?? 'configured model' }}.</p>
                 @elseif (($report['_meta']['generated_by'] ?? null) === 'local_fallback')
-                    <p class="mt-2 text-xs text-amber-100/80">Generated with the local fallback because the AI provider was not available for this submission.</p>
+                    <p class="mt-2 text-xs text-amber-100/80">
+                        @if (($report['_meta']['fallback_reason'] ?? null) === 'missing_ai_coach_entitlement')
+                            Generated with the local fallback because this account does not have AI Coach access.
+                        @else
+                            Generated with the local fallback because the AI provider was not available for this submission.
+                        @endif
+                    </p>
                 @endif
                 <p class="mt-4 text-sm leading-6 text-emerald-50/90">{{ $report['summary'] ?? '' }}</p>
 

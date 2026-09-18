@@ -38,6 +38,11 @@
         @if (session('status') === 'lifewheel-assessment-created')
             <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">Assessment saved.</div>
         @endif
+        @if (! $aiCoachEntitled)
+            <div class="mt-6 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm leading-6 text-amber-100">
+                This account can save LifeWheels, but it does not currently have the AI Coach entitlement. New reports will use the local fallback until the account/package includes AI Coach access.
+            </div>
+        @endif
 
         <div class="mt-8 grid gap-6 xl:grid-cols-[1fr_420px]">
             <section class="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
@@ -132,7 +137,13 @@
                         @if (($latestReport['_meta']['provider_key'] ?? null) === 'openai')
                             <p class="mt-1 text-xs text-emerald-100/80">Generated with OpenAI via {{ $latestReport['_meta']['model'] ?? 'configured model' }}.</p>
                         @elseif (($latestReport['_meta']['generated_by'] ?? null) === 'local_fallback')
-                            <p class="mt-1 text-xs text-amber-100/80">Generated with the local fallback. Add your OpenAI key and route AI Coach to OpenAI in Admin AI Settings.</p>
+                            <p class="mt-1 text-xs text-amber-100/80">
+                                @if (($latestReport['_meta']['fallback_reason'] ?? null) === 'missing_ai_coach_entitlement')
+                                    Generated with the local fallback because this account does not have AI Coach access.
+                                @else
+                                    Generated with the local fallback. Add your OpenAI key and route AI Coach to OpenAI in Admin AI Settings.
+                                @endif
+                            </p>
                         @endif
                     </div>
                     @if ($latest)

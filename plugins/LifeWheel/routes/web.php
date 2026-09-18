@@ -3,6 +3,7 @@
 use App\Models\AiPromptSetting;
 use App\Services\AI\AiGateway;
 use App\Services\AI\AiRequest;
+use App\Services\EntitlementService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -27,6 +28,7 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
             $previousScores = $previous ? lifeWheelScores((int) $previous->id) : collect();
             $history = lifeWheelHistory($request->user()->id, 8);
             $latestReport = $latest ? lifeWheelCoachingReport((int) $latest->id, $request->user()->id) : null;
+            $aiCoachEntitled = app(EntitlementService::class)->userHasFeature($request->user(), 'ai.coach');
 
             return View::file(dirname(__DIR__).'/resources/views/index.blade.php', [
                 'areas' => LifeWheelAreas::all(),
@@ -36,6 +38,7 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
                 'previousScores' => $previousScores,
                 'history' => $history,
                 'latestReport' => $latestReport,
+                'aiCoachEntitled' => $aiCoachEntitled,
             ]);
         })->name('index');
 
@@ -109,6 +112,7 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
                 'provider_key' => $aiReport['provider_key'],
                 'model' => $aiReport['model'],
                 'generated_by' => $aiReport['provider_key'] === 'lifeos' ? 'local_fallback' : 'ai_provider',
+                'fallback_reason' => $aiReport['fallback_reason'] ?? null,
             ];
 
             DB::table('lifewheel_coaching_reports')->updateOrInsert(
@@ -143,6 +147,7 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
                 'scores' => lifeWheelScores($assessmentId),
                 'areas' => LifeWheelAreas::all(),
                 'report' => lifeWheelCoachingReport($assessmentId, $request->user()->id),
+                'aiCoachEntitled' => app(EntitlementService::class)->userHasFeature($request->user(), 'ai.coach'),
             ]);
         })->name('history.show');
     });
@@ -280,11 +285,17 @@ if (! function_exists('generateLifeWheelAiCoachingReport')) {
                 'provider_key' => $response->providerKey,
                 'model' => $response->model,
                 'report' => $report,
+                'fallback_reason' => null,
             ];
         } catch (\Throwable $exception) {
+            $fallbackReason = str_contains($exception->getMessage(), 'not entitled')
+                ? 'missing_ai_coach_entitlement'
+                : 'ai_provider_unavailable';
+
             Log::warning('LifeWheel AI feedback fell back to local coaching text.', [
                 'assessment_id' => $assessmentId,
                 'user_id' => $request->user()->id,
+                'fallback_reason' => $fallbackReason,
                 'error' => $exception->getMessage(),
             ]);
 
@@ -292,6 +303,7 @@ if (! function_exists('generateLifeWheelAiCoachingReport')) {
                 'provider_key' => 'lifeos',
                 'model' => 'category-coach-v1',
                 'report' => $fallbackReport,
+                'fallback_reason' => $fallbackReason,
             ];
         }
     }
