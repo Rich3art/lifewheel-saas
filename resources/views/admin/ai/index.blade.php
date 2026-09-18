@@ -4,6 +4,21 @@
         <h1 class="mt-2 text-3xl font-semibold">AI settings</h1>
 
         <section class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+            <h2 class="text-lg font-semibold">LifeWheel feedback prompt</h2>
+            <p class="mt-2 max-w-3xl text-sm text-zinc-400">
+                This prompt is read before every new LifeWheel submission. It controls the tone and coaching rules used when the app compares current and previous LifeWheel notes.
+            </p>
+            <form method="POST" action="{{ route('admin.ai.prompts.update') }}" class="mt-4 space-y-4">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="key" value="lifewheel.feedback.system_prompt">
+                <input type="hidden" name="label" value="LifeWheel AI Coach Feedback">
+                <textarea name="prompt" rows="14" class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-zinc-100">{{ old('prompt', $lifeWheelPrompt?->prompt ?? '') }}</textarea>
+                <button class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-zinc-950">Save LifeWheel prompt</button>
+            </form>
+        </section>
+
+        <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h2 class="text-lg font-semibold">Providers</h2>
             <div class="mt-4 space-y-4">
                 @foreach ($providers as $provider)

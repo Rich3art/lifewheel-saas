@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AiModelRoute;
+use App\Models\AiPromptSetting;
 use App\Models\AiProvider;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +18,9 @@ final class AiSettingsController extends Controller
         return view('admin.ai.index', [
             'providers' => AiProvider::query()->orderBy('name')->get(),
             'routes' => AiModelRoute::query()->with('provider')->orderBy('feature_slug')->orderBy('sort_order')->get(),
+            'lifeWheelPrompt' => AiPromptSetting::query()
+                ->where('key', 'lifewheel.feedback.system_prompt')
+                ->first(),
         ]);
     }
 
@@ -68,5 +72,26 @@ final class AiSettingsController extends Controller
         $audit->log('admin.ai_route_updated', $request->user(), $route, ['feature_slug' => $route->feature_slug]);
 
         return back()->with('status', 'ai-route-updated');
+    }
+
+    public function updatePrompt(Request $request, AuditLogger $audit): RedirectResponse
+    {
+        $attributes = $request->validate([
+            'key' => ['required', 'string', 'in:lifewheel.feedback.system_prompt'],
+            'label' => ['required', 'string', 'max:120'],
+            'prompt' => ['required', 'string', 'min:20', 'max:12000'],
+        ]);
+
+        $prompt = AiPromptSetting::query()->updateOrCreate(
+            ['key' => $attributes['key']],
+            [
+                'label' => $attributes['label'],
+                'prompt' => $attributes['prompt'],
+            ],
+        );
+
+        $audit->log('admin.ai_prompt_updated', $request->user(), $prompt, ['key' => $prompt->key]);
+
+        return back()->with('status', 'ai-prompt-updated');
     }
 }

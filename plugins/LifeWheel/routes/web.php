@@ -1,7 +1,11 @@
 <?php
 
+use App\Models\AiPromptSetting;
+use App\Services\AI\AiGateway;
+use App\Services\AI\AiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use LifeWheel\Plugins\LifeWheel\Events\LifeWheelAssessmentCompleted;
@@ -81,7 +85,7 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
             });
 
             $scores = lifeWheelScores($assessmentId);
-            $report = buildLifeWheelCoachingReport(
+            $fallbackReport = buildLifeWheelCoachingReport(
                 areas: LifeWheelAreas::all(),
                 assessmentId: $assessmentId,
                 currentOverall: $overall,
@@ -90,13 +94,24 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
                 previousScores: $previousScores,
                 reflection: $attributes['reflection'] ?? null,
             );
+            $aiReport = generateLifeWheelAiCoachingReport(
+                request: $request,
+                assessmentId: $assessmentId,
+                currentOverall: $overall,
+                previousOverall: $previous ? (float) $previous->overall_score : null,
+                scores: $scores,
+                previousScores: $previousScores,
+                reflection: $attributes['reflection'] ?? null,
+                fallbackReport: $fallbackReport,
+            );
+            $report = $aiReport['report'];
 
             DB::table('lifewheel_coaching_reports')->updateOrInsert(
                 ['assessment_id' => $assessmentId],
                 [
                     'user_id' => $request->user()->id,
-                    'provider_key' => 'lifeos',
-                    'model' => 'category-coach-v1',
+                    'provider_key' => $aiReport['provider_key'],
+                    'model' => $aiReport['model'],
                     'content' => json_encode($report),
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -218,6 +233,182 @@ if (! function_exists('buildLifeWheelCoachingReport')) {
             'overall_change' => $overallDelta,
             'summary' => lifeWheelOverallFeedback($currentOverall, $previousOverall, $overallDelta, $reflection),
             'category_feedback' => $categoryFeedback,
+            'created_at' => now()->toIso8601String(),
+        ];
+    }
+}
+
+if (! function_exists('generateLifeWheelAiCoachingReport')) {
+    function generateLifeWheelAiCoachingReport(Request $request, int $assessmentId, float $currentOverall, ?float $previousOverall, \Illuminate\Support\Collection $scores, \Illuminate\Support\Collection $previousScores, ?string $reflection, array $fallbackReport): array
+    {
+        try {
+            $response = app(AiGateway::class)->generate(new AiRequest(
+                featureSlug: 'ai.coach',
+                systemPrompt: lifeWheelAiSystemPrompt(),
+                userPrompt: lifeWheelAiUserPrompt(
+                    assessmentId: $assessmentId,
+                    currentOverall: $currentOverall,
+                    previousOverall: $previousOverall,
+                    scores: $scores,
+                    previousScores: $previousScores,
+                    reflection: $reflection,
+                ),
+                responseSchema: lifeWheelAiResponseSchema(),
+                user: $request->user(),
+                metadata: [
+                    'source' => 'lifewheel.feedback',
+                    'assessment_id' => $assessmentId,
+                ],
+            ));
+
+            $report = normalizeLifeWheelAiReport(
+                assessmentId: $assessmentId,
+                currentOverall: $currentOverall,
+                previousOverall: $previousOverall,
+                scores: $scores,
+                previousScores: $previousScores,
+                structured: $response->structured,
+                fallbackReport: $fallbackReport,
+            );
+
+            return [
+                'provider_key' => $response->providerKey,
+                'model' => $response->model,
+                'report' => $report,
+            ];
+        } catch (\Throwable $exception) {
+            Log::warning('LifeWheel AI feedback fell back to local coaching text.', [
+                'assessment_id' => $assessmentId,
+                'user_id' => $request->user()->id,
+                'error' => $exception->getMessage(),
+            ]);
+
+            return [
+                'provider_key' => 'lifeos',
+                'model' => 'category-coach-v1',
+                'report' => $fallbackReport,
+            ];
+        }
+    }
+}
+
+if (! function_exists('lifeWheelAiSystemPrompt')) {
+    function lifeWheelAiSystemPrompt(): string
+    {
+        $prompt = AiPromptSetting::query()
+            ->where('key', 'lifewheel.feedback.system_prompt')
+            ->value('prompt');
+
+        return trim((string) $prompt)."\n\nReturn concise JSON only. The JSON must contain one overall summary and one personalized feedback item for every category in the supplied order.";
+    }
+}
+
+if (! function_exists('lifeWheelAiUserPrompt')) {
+    function lifeWheelAiUserPrompt(int $assessmentId, float $currentOverall, ?float $previousOverall, \Illuminate\Support\Collection $scores, \Illuminate\Support\Collection $previousScores, ?string $reflection): string
+    {
+        $categories = [];
+
+        foreach (LifeWheelAreas::all() as $area) {
+            $score = $scores[$area['key']] ?? null;
+            $previous = $previousScores[$area['key']] ?? null;
+
+            $categories[] = [
+                'area_key' => $area['key'],
+                'area_name' => $area['name'],
+                'group' => $area['group'],
+                'current_score' => $score ? (int) $score->score : null,
+                'current_note' => $score ? (string) ($score->note ?? '') : '',
+                'previous_score' => $previous ? (int) $previous->score : null,
+                'previous_note' => $previous ? (string) ($previous->note ?? '') : '',
+            ];
+        }
+
+        return json_encode([
+            'task' => 'Create LifeWheel AI Coach Feedback for this exact submission.',
+            'assessment_id' => $assessmentId,
+            'current_overall_score' => round($currentOverall, 1),
+            'previous_overall_score' => $previousOverall !== null ? round($previousOverall, 1) : null,
+            'overall_reflection' => (string) ($reflection ?? ''),
+            'categories' => $categories,
+            'output_rules' => [
+                'summary' => 'One warm paragraph for the full wheel.',
+                'category_feedback' => 'Exactly one item per category, using the same area_key values.',
+                'tone' => 'Encouraging, personal, grounded, not repetitive.',
+            ],
+        ], JSON_PRETTY_PRINT);
+    }
+}
+
+if (! function_exists('lifeWheelAiResponseSchema')) {
+    function lifeWheelAiResponseSchema(): array
+    {
+        return [
+            'type' => 'object',
+            'additionalProperties' => false,
+            'required' => ['summary', 'category_feedback'],
+            'properties' => [
+                'summary' => [
+                    'type' => 'string',
+                    'minLength' => 20,
+                ],
+                'category_feedback' => [
+                    'type' => 'array',
+                    'minItems' => count(LifeWheelAreas::all()),
+                    'maxItems' => count(LifeWheelAreas::all()),
+                    'items' => [
+                        'type' => 'object',
+                        'additionalProperties' => false,
+                        'required' => ['area_key', 'area_name', 'feedback'],
+                        'properties' => [
+                            'area_key' => ['type' => 'string'],
+                            'area_name' => ['type' => 'string'],
+                            'feedback' => ['type' => 'string', 'minLength' => 20],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+}
+
+if (! function_exists('normalizeLifeWheelAiReport')) {
+    function normalizeLifeWheelAiReport(int $assessmentId, float $currentOverall, ?float $previousOverall, \Illuminate\Support\Collection $scores, \Illuminate\Support\Collection $previousScores, array $structured, array $fallbackReport): array
+    {
+        $feedbackByKey = collect($structured['category_feedback'] ?? [])
+            ->filter(fn ($item): bool => is_array($item) && isset($item['area_key'], $item['feedback']))
+            ->keyBy('area_key');
+
+        if (! is_string($structured['summary'] ?? null) || $feedbackByKey->count() < count(LifeWheelAreas::all())) {
+            return $fallbackReport;
+        }
+
+        $categories = [];
+
+        foreach (LifeWheelAreas::all() as $area) {
+            $score = $scores[$area['key']] ?? null;
+            $previous = $previousScores[$area['key']] ?? null;
+            $aiFeedback = $feedbackByKey->get($area['key']);
+
+            $categories[] = [
+                'area_key' => $area['key'],
+                'area_name' => $area['name'],
+                'group' => $area['group'],
+                'score' => $score ? (int) $score->score : null,
+                'previous_score' => $previous ? (int) $previous->score : null,
+                'change' => ($score && $previous) ? (int) $score->score - (int) $previous->score : null,
+                'note' => $score ? (string) ($score->note ?? '') : '',
+                'previous_note' => $previous ? (string) ($previous->note ?? '') : '',
+                'feedback' => trim((string) $aiFeedback['feedback']),
+            ];
+        }
+
+        return [
+            'assessment_id' => $assessmentId,
+            'overall_score' => round($currentOverall, 1),
+            'previous_overall_score' => $previousOverall !== null ? round($previousOverall, 1) : null,
+            'overall_change' => $previousOverall === null ? null : round($currentOverall - $previousOverall, 1),
+            'summary' => trim((string) $structured['summary']),
+            'category_feedback' => $categories,
             'created_at' => now()->toIso8601String(),
         ];
     }

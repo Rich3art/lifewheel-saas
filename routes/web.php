@@ -189,6 +189,7 @@ Route::prefix('admin')
             Route::get('/ai', [AdminAiSettingsController::class, 'index'])->name('ai.index');
             Route::put('/ai/providers/{provider}', [AdminAiSettingsController::class, 'updateProvider'])->name('ai.providers.update');
             Route::put('/ai/routes/{route}', [AdminAiSettingsController::class, 'updateRoute'])->name('ai.routes.update');
+            Route::put('/ai/prompts', [AdminAiSettingsController::class, 'updatePrompt'])->name('ai.prompts.update');
         });
     });
 
