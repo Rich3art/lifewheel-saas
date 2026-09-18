@@ -102,6 +102,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'verified', 'twofactor', 'permission:admin.dashboard.view', 'force-admin-2fa'])
     ->group(function (): void {
+        Route::redirect('/', '/admin/dashboard')->name('root');
         Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
 
         Route::middleware('permission:admin.users.manage')->group(function (): void {
