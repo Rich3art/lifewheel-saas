@@ -56,7 +56,7 @@ final class AiSettingsController extends Controller
             'enabled' => ['nullable', 'boolean'],
             'mock_mode' => ['nullable', 'boolean'],
             'base_url' => ['nullable', 'url', 'max:255'],
-            'api_key' => ['nullable', 'string', 'max:4000'],
+            'api_key' => ['nullable', 'string', 'min:20', 'max:4000'],
         ]);
 
         $data = [

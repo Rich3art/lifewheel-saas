@@ -92,6 +92,9 @@
 
         <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
             <h2 class="text-lg font-semibold">Providers</h2>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-zinc-400">
+                API keys are stored encrypted on the server, never shown again after saving, and never sent to the browser except when you submit a replacement key.
+            </p>
             <div class="mt-4 space-y-4">
                 @foreach ($providers as $provider)
                     <form method="POST" action="{{ route('admin.ai.providers.update', $provider) }}" class="grid gap-3 rounded-xl border border-white/10 p-4 lg:grid-cols-[1fr_1fr_1fr_120px_120px] lg:items-center">
@@ -99,10 +102,14 @@
                         @method('PUT')
                         <div>
                             <p class="text-sm font-semibold">{{ $provider->key }}</p>
+                            <p class="mt-1 text-xs {{ $provider->encrypted_api_key ? 'text-emerald-300' : 'text-amber-300' }}">{{ $provider->encrypted_api_key ? 'API key saved securely' : 'No API key saved' }}</p>
                             <input name="name" value="{{ $provider->name }}" class="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
                         </div>
                         <input name="base_url" value="{{ $provider->base_url }}" placeholder="Base URL" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
-                        <input name="api_key" type="password" placeholder="Replace API key" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
+                        <div>
+                            <input name="api_key" type="password" value="" autocomplete="new-password" placeholder="{{ $provider->encrypted_api_key ? 'Leave blank to keep saved key' : 'Paste API key' }}" class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
+                            <p class="mt-1 text-xs text-zinc-500">Saved keys are encrypted and cannot be viewed here.</p>
+                        </div>
                         <label class="flex items-center gap-2 text-sm text-zinc-300"><input name="enabled" type="checkbox" value="1" @checked($provider->enabled)> Enabled</label>
                         <label class="flex items-center gap-2 text-sm text-zinc-300"><input name="mock_mode" type="checkbox" value="1" @checked($provider->mock_mode)> Mock</label>
                         <button class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-zinc-950 lg:col-start-5">Save</button>
