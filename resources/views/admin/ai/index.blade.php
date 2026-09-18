@@ -8,6 +8,9 @@
         @if (session('status') === 'ai-lifewheel-openai-configured')
             <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">LifeWheel feedback is now routed to OpenAI. Save an API key if you have not already, then run the connection test.</div>
         @endif
+        @if (session('status') === 'ai-coach-self-entitlement-granted')
+            <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">AI Coach access is enabled for your account.</div>
+        @endif
         @error('provider_test')
             <div class="mt-6 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-100">{{ $message }}</div>
         @enderror
@@ -53,6 +56,21 @@
                 <div class="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm">
                     <div class="text-zinc-400">Route active</div>
                     <div class="mt-1 font-semibold">{{ ($coachRoute?->enabled && $coachRoute?->provider?->key === 'openai') ? 'Yes' : 'No' }}</div>
+                </div>
+            </div>
+            <div class="mt-5 rounded-xl border border-white/10 bg-black/10 p-4">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <div class="text-sm font-semibold">Your AI Coach access</div>
+                        <p class="mt-1 text-sm text-zinc-400">
+                            Current account override:
+                            <span class="font-semibold text-zinc-100">{{ $currentUserAiCoachOverride?->enabled ? 'Enabled' : 'Not enabled' }}</span>
+                        </p>
+                    </div>
+                    <form method="POST" action="{{ route('admin.ai.lifewheel.grant-self-ai-coach') }}">
+                        @csrf
+                        <button class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold transition hover:bg-white/10">Enable AI Coach for my account</button>
+                    </form>
                 </div>
             </div>
         </section>

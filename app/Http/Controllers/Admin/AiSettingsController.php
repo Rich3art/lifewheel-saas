@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AiModelRoute;
 use App\Models\AiPromptSetting;
 use App\Models\AiProvider;
+use App\Models\Feature;
+use App\Models\UserFeatureOverride;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,18 +16,26 @@ use Illuminate\View\View;
 
 final class AiSettingsController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $providers = AiProvider::query()->orderBy('name')->get();
         $routes = AiModelRoute::query()->with('provider')->orderBy('feature_slug')->orderBy('sort_order')->get();
         $openAiProvider = $providers->firstWhere('key', 'openai');
         $coachRoute = $routes->firstWhere('feature_slug', 'ai.coach');
+        $aiCoachFeature = Feature::query()->where('slug', 'ai.coach')->first();
+        $currentUserAiCoachOverride = $aiCoachFeature
+            ? UserFeatureOverride::query()
+                ->where('user_id', $request->user()->id)
+                ->where('feature_id', $aiCoachFeature->id)
+                ->first()
+            : null;
 
         return view('admin.ai.index', [
             'providers' => $providers,
             'routes' => $routes,
             'openAiProvider' => $openAiProvider,
             'coachRoute' => $coachRoute,
+            'currentUserAiCoachOverride' => $currentUserAiCoachOverride,
             'lifeWheelAiReady' => (bool) (
                 $openAiProvider?->enabled
                 && ! $openAiProvider?->mock_mode
@@ -146,6 +156,38 @@ final class AiSettingsController extends Controller
         ]);
 
         return back()->with('status', 'ai-lifewheel-openai-configured');
+    }
+
+    public function grantCurrentUserAiCoach(Request $request, AuditLogger $audit): RedirectResponse
+    {
+        $feature = Feature::query()->firstOrCreate(
+            ['slug' => 'ai.coach'],
+            [
+                'name' => 'AI Coach',
+                'description' => 'AI coaching access.',
+                'source' => 'core',
+                'active' => true,
+            ],
+        );
+
+        $override = UserFeatureOverride::query()->updateOrCreate(
+            [
+                'user_id' => $request->user()->id,
+                'feature_id' => $feature->id,
+            ],
+            [
+                'enabled' => true,
+                'reason' => 'Admin self-granted AI Coach access for LifeWheel feedback testing.',
+                'created_by' => $request->user()->id,
+            ],
+        );
+
+        $audit->log('admin.ai_coach_self_entitlement_granted', $request->user(), $override, [
+            'feature_slug' => $feature->slug,
+            'target_user_id' => $request->user()->id,
+        ]);
+
+        return back()->with('status', 'ai-coach-self-entitlement-granted');
     }
 
     public function updateRoute(Request $request, AiModelRoute $route, AuditLogger $audit): RedirectResponse
