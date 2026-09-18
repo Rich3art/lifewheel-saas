@@ -112,6 +112,42 @@ final class AiSettingsController extends Controller
         return back()->with('status', 'ai-provider-test-succeeded');
     }
 
+    public function configureLifeWheelOpenAi(Request $request, AuditLogger $audit): RedirectResponse
+    {
+        $attributes = $request->validate([
+            'model' => ['nullable', 'string', 'max:120'],
+        ]);
+
+        $provider = AiProvider::query()->firstOrCreate(
+            ['key' => 'openai'],
+            ['name' => 'OpenAI', 'base_url' => 'https://api.openai.com/v1'],
+        );
+
+        $provider->forceFill([
+            'enabled' => true,
+            'mock_mode' => false,
+            'base_url' => $provider->base_url ?: 'https://api.openai.com/v1',
+        ])->save();
+
+        $route = AiModelRoute::query()->updateOrCreate(
+            ['feature_slug' => 'ai.coach', 'sort_order' => 10],
+            [
+                'ai_provider_id' => $provider->id,
+                'model' => $attributes['model'] ?? 'gpt-4o-mini',
+                'enabled' => true,
+                'monthly_limit' => null,
+            ],
+        );
+
+        $audit->log('admin.ai_lifewheel_openai_configured', $request->user(), $route, [
+            'provider' => $provider->key,
+            'feature_slug' => $route->feature_slug,
+            'model' => $route->model,
+        ]);
+
+        return back()->with('status', 'ai-lifewheel-openai-configured');
+    }
+
     public function updateRoute(Request $request, AiModelRoute $route, AuditLogger $audit): RedirectResponse
     {
         $attributes = $request->validate([

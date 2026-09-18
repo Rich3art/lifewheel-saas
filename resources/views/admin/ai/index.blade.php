@@ -5,6 +5,9 @@
         @if (session('status') === 'ai-provider-test-succeeded')
             <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">OpenAI connection test succeeded.</div>
         @endif
+        @if (session('status') === 'ai-lifewheel-openai-configured')
+            <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">LifeWheel feedback is now routed to OpenAI. Save an API key if you have not already, then run the connection test.</div>
+        @endif
         @error('provider_test')
             <div class="mt-6 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-100">{{ $message }}</div>
         @enderror
@@ -27,6 +30,11 @@
                             <button class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold transition hover:bg-white/10">Test OpenAI</button>
                         </form>
                     @endif
+                    <form method="POST" action="{{ route('admin.ai.lifewheel.openai') }}" class="mt-2">
+                        @csrf
+                        <input type="hidden" name="model" value="{{ $coachRoute?->model && $coachRoute?->provider?->key === 'openai' ? $coachRoute->model : 'gpt-4o-mini' }}">
+                        <button class="rounded-lg bg-white px-3 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-zinc-200">Use OpenAI for LifeWheel</button>
+                    </form>
                 </div>
             </div>
             <div class="mt-5 grid gap-3 md:grid-cols-4">
