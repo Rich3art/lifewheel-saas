@@ -2,6 +2,12 @@
     <main class="mx-auto max-w-6xl px-6 py-10">
         <a href="{{ route('admin.dashboard') }}" class="text-sm text-zinc-400">Admin</a>
         <h1 class="mt-2 text-3xl font-semibold">AI settings</h1>
+        @if (session('status') === 'ai-provider-test-succeeded')
+            <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">OpenAI connection test succeeded.</div>
+        @endif
+        @error('provider_test')
+            <div class="mt-6 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-100">{{ $message }}</div>
+        @enderror
 
         <section class="mt-8 rounded-2xl border {{ $lifeWheelAiReady ? 'border-emerald-400/20 bg-emerald-400/10' : 'border-amber-400/20 bg-amber-400/10' }} p-6">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -15,6 +21,12 @@
                 <div class="rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm">
                     <div class="text-zinc-400">AI Coach route</div>
                     <div class="mt-1 font-semibold">{{ $coachRoute?->provider?->name ?? 'No provider' }} / {{ $coachRoute?->model ?? 'No model' }}</div>
+                    @if ($openAiProvider)
+                        <form method="POST" action="{{ route('admin.ai.providers.test', $openAiProvider) }}" class="mt-3">
+                            @csrf
+                            <button class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold transition hover:bg-white/10">Test OpenAI</button>
+                        </form>
+                    @endif
                 </div>
             </div>
             <div class="mt-5 grid gap-3 md:grid-cols-4">

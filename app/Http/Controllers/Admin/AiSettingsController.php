@@ -9,6 +9,7 @@ use App\Models\AiProvider;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 final class AiSettingsController extends Controller
@@ -63,6 +64,52 @@ final class AiSettingsController extends Controller
         $audit->log('admin.ai_provider_updated', $request->user(), $provider, ['provider' => $provider->key]);
 
         return back()->with('status', 'ai-provider-updated');
+    }
+
+    public function testProvider(Request $request, AiProvider $provider, AuditLogger $audit): RedirectResponse
+    {
+        if ($provider->key !== 'openai') {
+            return back()->withErrors(['provider_test' => 'Only OpenAI can be tested from this panel right now.']);
+        }
+
+        if (! $provider->encrypted_api_key) {
+            return back()->withErrors(['provider_test' => 'OpenAI API key is not saved yet.']);
+        }
+
+        if (! $provider->enabled || $provider->mock_mode) {
+            return back()->withErrors(['provider_test' => 'OpenAI must be enabled and Mock mode must be off before testing.']);
+        }
+
+        $model = (string) AiModelRoute::query()
+            ->where('feature_slug', 'ai.coach')
+            ->where('enabled', true)
+            ->where('ai_provider_id', $provider->id)
+            ->value('model');
+
+        if ($model === '') {
+            return back()->withErrors(['provider_test' => 'Route ai.coach to OpenAI before testing LifeWheel feedback.']);
+        }
+
+        $response = Http::timeout(20)
+            ->withToken($provider->encrypted_api_key)
+            ->post(rtrim($provider->base_url ?: 'https://api.openai.com/v1', '/').'/chat/completions', [
+                'model' => $model,
+                'messages' => [
+                    ['role' => 'system', 'content' => 'Reply with valid JSON only.'],
+                    ['role' => 'user', 'content' => 'Return {"ok":true,"service":"openai"}'],
+                ],
+                'response_format' => ['type' => 'json_object'],
+            ]);
+
+        if (! $response->successful()) {
+            $audit->log('admin.ai_provider_test_failed', $request->user(), $provider, ['provider' => $provider->key, 'status' => $response->status()]);
+
+            return back()->withErrors(['provider_test' => 'OpenAI test failed with HTTP '.$response->status().'. Check the key, model, and billing status.']);
+        }
+
+        $audit->log('admin.ai_provider_test_succeeded', $request->user(), $provider, ['provider' => $provider->key, 'model' => $model]);
+
+        return back()->with('status', 'ai-provider-test-succeeded');
     }
 
     public function updateRoute(Request $request, AiModelRoute $route, AuditLogger $audit): RedirectResponse
