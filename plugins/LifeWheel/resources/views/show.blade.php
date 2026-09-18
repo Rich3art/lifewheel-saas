@@ -15,6 +15,11 @@
             <section class="mt-6 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-6">
                 <p class="text-sm text-emerald-200">Saved with this LifeWheel</p>
                 <h2 class="mt-1 text-2xl font-semibold">AI Coach Feedback</h2>
+                @if (($report['_meta']['provider_key'] ?? null) === 'openai')
+                    <p class="mt-2 text-xs text-emerald-100/80">Generated with OpenAI via {{ $report['_meta']['model'] ?? 'configured model' }}.</p>
+                @elseif (($report['_meta']['generated_by'] ?? null) === 'local_fallback')
+                    <p class="mt-2 text-xs text-amber-100/80">Generated with the local fallback because the AI provider was not available for this submission.</p>
+                @endif
                 <p class="mt-4 text-sm leading-6 text-emerald-50/90">{{ $report['summary'] ?? '' }}</p>
 
                 <div class="mt-6 space-y-4">

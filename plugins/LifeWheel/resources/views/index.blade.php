@@ -129,6 +129,11 @@
                     <div>
                         <p class="text-sm text-emerald-200">Saved with your LifeWheel</p>
                         <h2 class="mt-1 text-lg font-semibold">AI Coach Feedback</h2>
+                        @if (($latestReport['_meta']['provider_key'] ?? null) === 'openai')
+                            <p class="mt-1 text-xs text-emerald-100/80">Generated with OpenAI via {{ $latestReport['_meta']['model'] ?? 'configured model' }}.</p>
+                        @elseif (($latestReport['_meta']['generated_by'] ?? null) === 'local_fallback')
+                            <p class="mt-1 text-xs text-amber-100/80">Generated with the local fallback. Add your OpenAI key and route AI Coach to OpenAI in Admin AI Settings.</p>
+                        @endif
                     </div>
                     @if ($latest)
                         <a href="{{ route('plugins.lifewheel.history.show', $latest->id) }}" class="rounded-xl border border-emerald-200/20 px-4 py-2 text-sm text-emerald-50">Open full report</a>

@@ -105,6 +105,11 @@ Route::middleware(['auth', 'verified', 'twofactor', 'feature:lifewheel.use'])
                 fallbackReport: $fallbackReport,
             );
             $report = $aiReport['report'];
+            $report['_meta'] = [
+                'provider_key' => $aiReport['provider_key'],
+                'model' => $aiReport['model'],
+                'generated_by' => $aiReport['provider_key'] === 'lifeos' ? 'local_fallback' : 'ai_provider',
+            ];
 
             DB::table('lifewheel_coaching_reports')->updateOrInsert(
                 ['assessment_id' => $assessmentId],
