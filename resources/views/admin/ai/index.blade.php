@@ -8,6 +8,9 @@
         @if (session('status') === 'ai-lifewheel-openai-configured')
             <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">LifeWheel feedback is now routed to OpenAI. Save an API key if you have not already, then run the connection test.</div>
         @endif
+        @if (session('status') === 'ai-lifewheel-local-configured')
+            <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">LifeWheel feedback is now routed to the free local coach. This uses no paid API credits and requires no API key.</div>
+        @endif
         @if (session('status') === 'ai-coach-self-entitlement-granted')
             <div class="mt-6 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">AI Coach access is enabled for your account.</div>
         @endif
@@ -38,8 +41,15 @@
                         <input type="hidden" name="model" value="{{ $coachRoute?->model && $coachRoute?->provider?->key === 'openai' ? $coachRoute->model : 'gpt-4o-mini' }}">
                         <button class="rounded-lg bg-white px-3 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-zinc-200">Use OpenAI for LifeWheel</button>
                     </form>
+                    <form method="POST" action="{{ route('admin.ai.lifewheel.local') }}" class="mt-2">
+                        @csrf
+                        <button class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold transition hover:bg-white/10">Use Free Local Coach</button>
+                    </form>
                 </div>
             </div>
+            <p class="mt-4 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm leading-6 text-zinc-300">
+                Free Local Coach costs nothing and works without API keys, but it is rule-based coaching inside LifeWheel. Real open-source LLMs need a separate model server, which ordinary cPanel hosting cannot run.
+            </p>
             <div class="mt-5 grid gap-3 md:grid-cols-4">
                 <div class="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm">
                     <div class="text-zinc-400">OpenAI enabled</div>

@@ -164,6 +164,39 @@ final class AiSettingsController extends Controller
         return back()->with('status', 'ai-lifewheel-openai-configured');
     }
 
+    public function configureLifeWheelLocal(Request $request, AuditLogger $audit): RedirectResponse
+    {
+        $provider = AiProvider::query()->firstOrCreate(
+            ['key' => 'mock'],
+            ['name' => 'Free Local Coach', 'enabled' => true, 'mock_mode' => true],
+        );
+
+        $provider->forceFill([
+            'name' => 'Free Local Coach',
+            'enabled' => true,
+            'mock_mode' => true,
+            'base_url' => null,
+        ])->save();
+
+        $route = AiModelRoute::query()->updateOrCreate(
+            ['feature_slug' => 'ai.coach', 'sort_order' => 10],
+            [
+                'ai_provider_id' => $provider->id,
+                'model' => 'local-free-coach-v1',
+                'enabled' => true,
+                'monthly_limit' => null,
+            ],
+        );
+
+        $audit->log('admin.ai_lifewheel_local_configured', $request->user(), $route, [
+            'provider' => $provider->key,
+            'feature_slug' => $route->feature_slug,
+            'model' => $route->model,
+        ]);
+
+        return back()->with('status', 'ai-lifewheel-local-configured');
+    }
+
     public function grantCurrentUserAiCoach(Request $request, AuditLogger $audit): RedirectResponse
     {
         $feature = Feature::query()->firstOrCreate(
