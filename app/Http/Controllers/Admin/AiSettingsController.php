@@ -9,6 +9,7 @@ use App\Models\AiProvider;
 use App\Models\Feature;
 use App\Models\UserFeatureOverride;
 use App\Services\AuditLogger;
+use App\Services\AI\OpenAiProviderClient;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -63,7 +64,9 @@ final class AiSettingsController extends Controller
             'name' => $attributes['name'],
             'enabled' => (bool) ($attributes['enabled'] ?? false),
             'mock_mode' => (bool) ($attributes['mock_mode'] ?? false),
-            'base_url' => $attributes['base_url'] ?? null,
+            'base_url' => $provider->key === 'openai'
+                ? OpenAiProviderClient::baseUrl($attributes['base_url'] ?? null)
+                : ($attributes['base_url'] ?? null),
         ];
 
         if (($attributes['api_key'] ?? '') !== '') {
@@ -102,7 +105,7 @@ final class AiSettingsController extends Controller
 
         $response = Http::timeout(20)
             ->withToken($provider->encrypted_api_key)
-            ->post(rtrim($provider->base_url ?: 'https://api.openai.com/v1', '/').'/chat/completions', [
+            ->post(OpenAiProviderClient::baseUrl($provider->base_url).'/chat/completions', [
                 'model' => $model,
                 'messages' => [
                     ['role' => 'system', 'content' => 'Reply with valid JSON only.'],
@@ -112,9 +115,12 @@ final class AiSettingsController extends Controller
             ]);
 
         if (! $response->successful()) {
+            $message = (string) data_get($response->json(), 'error.message', 'Check the key, model, and billing status.');
+            $message = mb_substr($message, 0, 220);
+
             $audit->log('admin.ai_provider_test_failed', $request->user(), $provider, ['provider' => $provider->key, 'status' => $response->status()]);
 
-            return back()->withErrors(['provider_test' => 'OpenAI test failed with HTTP '.$response->status().'. Check the key, model, and billing status.']);
+            return back()->withErrors(['provider_test' => 'OpenAI test failed with HTTP '.$response->status().': '.$message]);
         }
 
         $audit->log('admin.ai_provider_test_succeeded', $request->user(), $provider, ['provider' => $provider->key, 'model' => $model]);
@@ -136,7 +142,7 @@ final class AiSettingsController extends Controller
         $provider->forceFill([
             'enabled' => true,
             'mock_mode' => false,
-            'base_url' => $provider->base_url ?: 'https://api.openai.com/v1',
+            'base_url' => OpenAiProviderClient::baseUrl($provider->base_url),
         ])->save();
 
         $route = AiModelRoute::query()->updateOrCreate(

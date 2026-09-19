@@ -9,6 +9,13 @@ use RuntimeException;
 
 final class OpenAiProviderClient implements AiProviderClient
 {
+    public static function baseUrl(?string $baseUrl): string
+    {
+        $baseUrl = rtrim($baseUrl ?: 'https://api.openai.com/v1', '/');
+
+        return str_ends_with($baseUrl, '/v1') ? $baseUrl : $baseUrl.'/v1';
+    }
+
     public function generate(AiRequest $request, AiModelRoute $route): AiResponse
     {
         $provider = $route->provider;
@@ -39,10 +46,10 @@ final class OpenAiProviderClient implements AiProviderClient
 
         $response = Http::timeout(config('ai.timeout_seconds', 30))
             ->withToken($apiKey)
-            ->post(rtrim($provider->base_url ?: 'https://api.openai.com/v1', '/').'/chat/completions', $payload);
+            ->post(self::baseUrl($provider->base_url).'/chat/completions', $payload);
 
         if (! $response->successful()) {
-            throw new RuntimeException('OpenAI request failed.');
+            throw new RuntimeException('OpenAI request failed with HTTP '.$response->status().'.');
         }
 
         $data = $response->json();
